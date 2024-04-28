@@ -1,0 +1,36 @@
+name: Deploy to Virtual Machine
+
+on:
+    push:
+    pull_request:
+    workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to Virtual Machine
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          rm: true
+          source: "*"
+          target: "/home/sokungz/cpe241/backend"
+
+      - name: Create environment file
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd /home/sokungz/Works
+            echo "${{ secrets.ENV }}" >> .env
+            docker compose up -d --build
