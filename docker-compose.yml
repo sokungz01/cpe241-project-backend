@@ -9,6 +9,4 @@ services:
       - 5500:5500
     env_file:
       - .env
-    depends_on:
-      - mysql
     restart: on-failure
