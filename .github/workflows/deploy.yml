@@ -31,6 +31,6 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           script: |
-            cd /home/sokungz/Works
+            cd /home/sokungz/cpe241/backend
             echo "${{ secrets.ENV }}" >> .env
             docker compose up -d --build
