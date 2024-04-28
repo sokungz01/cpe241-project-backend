@@ -12,5 +12,5 @@ RUN go mod download
 COPY . .
 
 RUN go build -o ./output/go-backend
-EXPOSE 5500
+EXPOSE 3000
 CMD [ "./output/go-backend"]
