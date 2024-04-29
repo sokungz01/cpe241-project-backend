@@ -10,26 +10,3 @@ services:
     env_file:
       - .env
     restart: on-failure
-    depends_on:
-      mysql:
-        condition: service_started
-    links:
-      - mysql
-
-  mysql:
-    image: mysql:8
-    ports:
-      - "19998:3306"
-    environment:
-      MYSQL_DATABASE: sornrubsom
-      MYSQL_ROOT_PASSWORD: "CPE241!sornrubsom"
-
-  phpmyadmin:
-    image: phpmyadmin
-    ports:
-      - "8002:80"
-    environment:
-      PMA_HOST: mysql
-      UPLOAD_LIMIT: 512M
-    depends_on:
-      - mysql
