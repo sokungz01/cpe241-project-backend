@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -21,8 +20,7 @@ func main() {
 	dbURL := os.Getenv("DB_URL")
 	myDB, err := platform.NewSql(dbURL)
 	if err != nil {
-		fmt.Println(err)
-		return
+		log.Fatal(err)
 	}
 
 	api := fiber.New()
