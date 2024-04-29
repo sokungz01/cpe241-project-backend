@@ -35,3 +35,4 @@ jobs:
             docker compose down
             echo "${{ secrets.ENV }}" >> .env
             docker compose up -d --build
+            docker compose up -d app

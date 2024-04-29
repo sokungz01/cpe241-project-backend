@@ -1,6 +1,7 @@
 version: "3.8"
 services:
   app:
+    container_name: go-backend
     build:
       context: .
       dockerfile: Dockerfile
@@ -9,6 +10,8 @@ services:
     env_file:
       - .env
     restart: on-failure
+    networks:
+      - my_network
   mysql:
     image: mysql:8
     ports:
@@ -16,6 +19,8 @@ services:
     environment:
       MYSQL_DATABASE: sornrubsom
       MYSQL_ROOT_PASSWORD: "CPE241!sornrubsom"
+    networks:
+      - my_network
   phpmyadmin:
     image: phpmyadmin
     ports:
@@ -25,3 +30,8 @@ services:
       UPLOAD_LIMIT: 512M
     depends_on:
       - mysql
+    networks:
+      - my_network
+
+networks:
+  my_network:
