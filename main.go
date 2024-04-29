@@ -7,10 +7,8 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
-	"github.com/sokungz01/cpe241-project-backend/controller"
 	"github.com/sokungz01/cpe241-project-backend/platform"
-	"github.com/sokungz01/cpe241-project-backend/repository"
-	"github.com/sokungz01/cpe241-project-backend/usecase"
+	"github.com/sokungz01/cpe241-project-backend/routes"
 )
 
 func main() {
@@ -26,11 +24,8 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	userRepo := repository.NewUSerRepository(myDB)
-	userUseCase := usecase.NewUserUseCase(userRepo)
-	userController := controller.NewUserController(userUseCase)
 
 	api := fiber.New()
-	api.Post("/sornrubsom/signup", userController.SignUp)
+	routes.RoutesRegister(api, myDB)
 	api.Listen(":3000")
 }
