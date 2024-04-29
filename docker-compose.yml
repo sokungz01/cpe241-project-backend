@@ -9,8 +9,7 @@ services:
       - 5500:3000
     restart: on-failure
     depends_on:
-      mysql:
-        condition: service_healthy
+      - mysql
     environment:
       DB_URL: root:CPE241!sornrubsom@tcp(mysql:3306)/sornrubsom
     networks:
@@ -23,10 +22,6 @@ services:
     environment:
       MYSQL_DATABASE: sornrubsom
       MYSQL_ROOT_PASSWORD: "CPE241!sornrubsom"
-    healthcheck:
-      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '--user=root', '--password=CPE241!sornrubsom']
-      interval: 1s
-      retries: 60
     networks:
       - connection
 
