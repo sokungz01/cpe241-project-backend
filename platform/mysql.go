@@ -1,26 +1,27 @@
 package platform
 
 import (
+	_ "database/sql"
 	"time"
-	_"database/sql"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 )
 
-type Mysql struct{
+type Mysql struct {
 	*sqlx.DB
 }
 
-func NewSql (dataSource string) (*Mysql,error){
-	db,err := sqlx.Connect("mysql",dataSource)
+func NewSql(dataSource string) (*Mysql, error) {
+	db, err := sqlx.Connect("mysql", dataSource)
 
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 
-	db.SetConnMaxIdleTime(5*time.Minute)
+	db.SetConnMaxIdleTime(5 * time.Minute)
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(10)
 
-	return &Mysql{db},nil
+	return &Mysql{db}, nil
 }

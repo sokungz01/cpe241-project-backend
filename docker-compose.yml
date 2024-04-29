@@ -7,14 +7,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - 5500:3000
-    env_file:
-      - .env
     restart: on-failure
     depends_on:
       mysql:
         condition: service_started
     environment:
-      - DB_URL=root:CPE241!sornrubsom@tcp(mysql:3306)/sornrubsom
+      DB_URL: root:CPE241!sornrubsom@tcp(mysql:3306)/sornrubsom
     networks:
       - connection
 
