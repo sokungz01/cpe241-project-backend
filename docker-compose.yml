@@ -26,7 +26,7 @@ services:
     healthcheck:
       test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '--user=root', '--password=CPE241!sornrubsom']
       interval: 1s
-      retries: 15
+      retries: 60
     networks:
       - connection
 
