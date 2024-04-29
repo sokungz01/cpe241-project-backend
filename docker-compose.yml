@@ -13,8 +13,6 @@ services:
     image: mysql:8
     ports:
       - "19998:3306"
-    depends_on:
-      - mysql
     environment:
       MYSQL_DATABASE: sornrubsom
       MYSQL_ROOT_PASSWORD: "CPE241!sornrubsom"
