@@ -9,7 +9,6 @@ import (
 )
 
 func RoutesRegister(app *fiber.App, myDB *platform.Mysql) {
-
 	userRepo := repository.NewUSerRepository(myDB)
 	userUseCase := usecase.NewUserUseCase(userRepo)
 	userController := controller.NewUserController(userUseCase)

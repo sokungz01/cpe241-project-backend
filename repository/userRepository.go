@@ -16,10 +16,10 @@ func NewUSerRepository(db *platform.Mysql) domain.UserRepository {
 }
 
 func (s *userRepository) Create(newUser *domain.User) error {
-	_,err := s.db.NamedExec("INSERT INTO `employee` (firstname,lastname,email,password)"+
-							"VALUE (:firstname,:lastname,:email,:password)",
-							newUser)
-	if err != nil{
+	_, err := s.db.NamedExec("INSERT INTO `employee` (firstname,lastname,email,password)"+
+		"VALUE (:firstname,:lastname,:email,:password)",
+		newUser)
+	if err != nil {
 		return nil
 	}
 	return nil
@@ -33,25 +33,25 @@ func (s *userRepository) GetById(id int) (*domain.User, error) {
 	return &response, nil
 }
 
-func (s *userRepository) GetByEmail(email string) (*domain.User, error){
+func (s *userRepository) GetByEmail(email string) (*domain.User, error) {
 	var response domain.User
-	err := s.db.Get(&response,	"SELECT *" + 
-								"FROM `employee`" +
-								"WHERE `email` = ?",email)
+	err := s.db.Get(&response, "SELECT *"+
+		"FROM `employee`"+
+		"WHERE `email` = ?", email)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
-	return &response,nil
+	return &response, nil
 
 }
 
-func (s *userRepository) Getall()(*domain.User, error) {
+func (s *userRepository) Getall() (*domain.User, error) {
 	var response domain.User
-	err := s.db.Get(&response,	"SELECT *" + 
-								"FROM `employee`")
+	err := s.db.Get(&response, "SELECT *"+
+		"FROM `employee`")
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	fmt.Println(response)
-	return nil,nil
+	return nil, nil
 }
