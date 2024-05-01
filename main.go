@@ -24,7 +24,6 @@ func main() {
 
 	api := fiber.New()
 	api.Use(cors.New(cors.Config{
-		AllowOrigins:     "*",
 		AllowCredentials: true,
 	}))
 	routes.RoutesRegister(api, myDB, cfg)
