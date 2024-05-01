@@ -15,6 +15,7 @@ type UserRepository interface {
 	GetById(id int) (*User, error)
 	GetByEmail(email string)(*User, error)
 	Getall()(*User, error)
+	DeleteUser(user *User) error
 	//GetBymail(email string) *User
 }
 

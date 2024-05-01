@@ -25,7 +25,6 @@ func (u *userUsecase) SignUp(c *fiber.Ctx) error {
 	if err := c.BodyParser(newUser); err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("Bruh")
 	}
-	newUser.Password = "HumYaiYai"
 	if err := u.usecase.Create(newUser); err != nil {
 		return err
 	}
