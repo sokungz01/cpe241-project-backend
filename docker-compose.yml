@@ -12,8 +12,6 @@ services:
       - mysql
     environment:
       DB_URL: root:CPE241!sornrubsom@tcp(mysql:3306)/sornrubsom
-    networks:
-      - connection
 
   mysql:
     image: mysql:latest
@@ -22,8 +20,6 @@ services:
     environment:
       MYSQL_DATABASE: sornrubsom
       MYSQL_ROOT_PASSWORD: "CPE241!sornrubsom"
-    networks:
-      - connection
 
   phpmyadmin:
     image: phpmyadmin
@@ -34,6 +30,3 @@ services:
       UPLOAD_LIMIT: 512M
     depends_on:
       - mysql
-
-networks:
-  connection:
