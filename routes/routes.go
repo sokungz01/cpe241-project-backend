@@ -13,6 +13,6 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql) {
 	userUseCase := usecase.NewUserUseCase(userRepo)
 	userController := controller.NewUserController(userUseCase)
 
-	userGroup := app.Group("/auth")
-	userGroup.Post("/signup", userController.SignUp)
+	authGroup := app.Group("/auth")
+	authGroup.Post("/signup", userController.SignUp)
 }
