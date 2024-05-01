@@ -1,8 +1,6 @@
 package repository
 
 import (
-	"fmt"
-
 	"github.com/sokungz01/cpe241-project-backend/domain"
 	"github.com/sokungz01/cpe241-project-backend/platform"
 )
@@ -35,9 +33,7 @@ func (s *userRepository) GetById(id int) (*domain.User, error) {
 
 func (s *userRepository) GetByEmail(email string) (*domain.User, error) {
 	var response domain.User
-	err := s.db.Get(&response, "SELECT *"+
-		"FROM `employee`"+
-		"WHERE `email` = ?", email)
+	err := s.db.Get(&response, "SELECT * FROM `employee` WHERE `email` = ?", email)
 	if err != nil {
 		return nil, err
 	}
@@ -48,11 +44,10 @@ func (s *userRepository) GetByEmail(email string) (*domain.User, error) {
 func (s *userRepository) Getall() (*[]domain.User, error) {
 	response := make([]domain.User, 0)
 	err := s.db.Select(&response, "SELECT `employeeID`,`name`,`surname`,`positionID`,`bonus`,`email`"+
-	"FROM `employee`")
+		"FROM `employee`")
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(response)
 	return &response, nil
 }
 

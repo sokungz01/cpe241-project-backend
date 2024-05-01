@@ -1,12 +1,8 @@
 package controller
 
 import (
-	//_"fmt"
-	"fmt"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/sokungz01/cpe241-project-backend/domain"
-	//"github.com/sokungz01/cpe241-project-backend/usecase"
 )
 
 type UserController interface {
@@ -35,8 +31,7 @@ func (u *userUsecase) SignUp(c *fiber.Ctx) error {
 }
 
 func (u *userUsecase) GetAll(c *fiber.Ctx) error {
-	users ,err := u.usecase.GetAll()
-	fmt.Println(err)
+	users, err := u.usecase.GetAll()
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("Pung I here")
 	}

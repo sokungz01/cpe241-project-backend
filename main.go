@@ -22,6 +22,6 @@ func main() {
 	}
 
 	api := fiber.New()
-	routes.RoutesRegister(api, myDB)
+	routes.RoutesRegister(api, myDB, cfg)
 	api.Listen(":3000")
 }
