@@ -56,6 +56,14 @@ func (u *userUseCase) GetByEmail(email string) (*domain.User, error) {
 	return resp, nil
 }
 
+func (u *userUseCase) GetAll() (*[]domain.User, error) {
+	resp, err := u.userRepository.Getall()
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
 func MailValidator(address string) error {
 	_, err := mail.ParseAddress(address)
 	return err

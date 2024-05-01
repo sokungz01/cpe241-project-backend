@@ -17,7 +17,7 @@ func NewUSerRepository(db *platform.Mysql) domain.UserRepository {
 
 func (s *userRepository) Create(newUser *domain.User) error {
 	_, err := s.db.NamedExec("INSERT INTO `employee` (name,surname,email,password)"+
-		"VALUE (:firstname,:lastname,:email,:password)",
+		"VALUE (:name,:surname,:email,:password)",
 		newUser)
 	if err != nil {
 		return err
@@ -45,15 +45,15 @@ func (s *userRepository) GetByEmail(email string) (*domain.User, error) {
 
 }
 
-func (s *userRepository) Getall() (*domain.User, error) {
-	var response domain.User
-	err := s.db.Get(&response, "SELECT *"+
-		"FROM `employee`")
+func (s *userRepository) Getall() (*[]domain.User, error) {
+	response := make([]domain.User, 0)
+	err := s.db.Select(&response, "SELECT `employeeID`,`name`,`surname`,`positionID`,`bonus`,`email`"+
+	"FROM `employee`")
 	if err != nil {
 		return nil, err
 	}
 	fmt.Println(response)
-	return nil, nil
+	return &response, nil
 }
 
 func (s *userRepository) DeleteUser(user *domain.User) error {

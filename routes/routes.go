@@ -15,4 +15,6 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql) {
 
 	authGroup := app.Group("/auth")
 	authGroup.Post("/signup", userController.SignUp)
+	userGroup := app.Group("/user")
+	userGroup.Get("/all",userController.GetAll)
 }
