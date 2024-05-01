@@ -20,7 +20,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-          rm: true
+          rm: false
           source: "*"
           target: "/home/sokungz/cpe241/backend"
 
