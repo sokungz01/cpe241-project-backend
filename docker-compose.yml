@@ -17,6 +17,8 @@ services:
     image: mysql:latest
     ports:
       - "19998:3306"
+    volumes:
+      - ./volumes/db:/var/lib/mysql
     environment:
       MYSQL_DATABASE: sornrubsom
       MYSQL_ROOT_PASSWORD: "CPE241!sornrubsom"
