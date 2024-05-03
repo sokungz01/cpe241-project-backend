@@ -20,10 +20,19 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	authUseCase := usecase.NewAuthUseCase(authRepo)
 	authController := controller.NewAuthenController(authUseCase)
 
+	positionRepo := repository.NewPositionRepository(myDB)
+	positionUsecase := usecase.NewPositionUsecase(positionRepo)
+	positionController := controller.NewPositionController(positionUsecase)
+	
 	authGroup := app.Group("/auth")
 	authGroup.Post("/signup", userController.SignUp)
 	authGroup.Post("/signin", authController.SignIn)
 
 	userGroup := app.Group("/user")
 	userGroup.Get("/all", jwt, userController.GetAll)
+
+	positionGroup := app.Group("/position")
+	positionGroup.Get("/",positionController.GetAll)
+	positionGroup.Get("/findbypositionname",positionController.GetByPositionName)
+	positionGroup.Post("/",positionController.CreatePosition)
 }
