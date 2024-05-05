@@ -21,3 +21,12 @@ func (s *authenRepository) SignIn(user *domain.AuthenPayload) (*domain.AuthenPay
 	}
 	return &response, nil
 }
+
+func (s *authenRepository) Me(userID int) (*domain.AuthenDetail, error) {
+	var response domain.AuthenDetail
+	err := s.db.Get(&response, "SELECT `employeeID`,`name`,`surname`,`positionID` FROM `employee` WHERE `employeeID` = ? ", userID)
+	if err != nil {
+		return nil, err
+	}
+	return &response, nil
+}

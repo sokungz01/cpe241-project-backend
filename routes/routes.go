@@ -21,6 +21,7 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	authController := controller.NewAuthenController(authUseCase)
 
 	authGroup := app.Group("/auth")
+	authGroup.Get("/me", jwt, authController.Me)
 	authGroup.Post("/signup", userController.SignUp)
 	authGroup.Post("/signin", authController.SignIn)
 

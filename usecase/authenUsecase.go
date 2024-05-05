@@ -31,3 +31,15 @@ func (u *authenUsecase) SignIn(user *domain.AuthenPayload) (*domain.AuthenPayloa
 	}
 	return AuthResponse, nil
 }
+func (u *authenUsecase) Me(userID int) (*domain.AuthenDetail, error) {
+	if userID == 0 {
+		return nil, errors.New("invalid userID")
+	}
+
+	userData, err := u.authenRepository.Me(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return userData, nil
+}

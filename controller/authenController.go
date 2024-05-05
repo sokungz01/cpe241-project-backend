@@ -1,10 +1,13 @@
 package controller
 
 import (
+	"errors"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
 	jtoken "github.com/golang-jwt/jwt/v4"
 	"github.com/sokungz01/cpe241-project-backend/config"
 	"github.com/sokungz01/cpe241-project-backend/domain"
@@ -12,6 +15,7 @@ import (
 
 type AuthController interface {
 	SignIn(c *fiber.Ctx) error
+	Me(c *fiber.Ctx) error
 }
 
 type authenUsecase struct {
@@ -54,4 +58,44 @@ func (u *authenUsecase) SignIn(c *fiber.Ctx) error {
 	return c.JSON(domain.AuthenResponse{
 		Token: t,
 	})
+}
+
+func (u *authenUsecase) Me(c *fiber.Ctx) error {
+	reqToken := c.Request().Header.Peek("Authorization")
+	splitToken := strings.Split(string(reqToken), "Bearer ")
+	claims := jwt.MapClaims{}
+	_, err := jwt.ParseWithClaims(splitToken[1], claims, func(token *jwt.Token) (interface{}, error) {
+		cfg, err := config.Load()
+		if err != nil {
+			log.Fatal("Can't load config", err)
+		}
+		return []byte(cfg.JWT_ACCESS_TOKEN), nil
+	})
+
+	if err != nil {
+		return err
+	}
+
+	exp, ok := claims["exp"].(float64) // Type assert exp to float64
+	if !ok {
+		return errors.New("exp claim is not a float64")
+	}
+
+	if exp != 0 && int64(exp) < time.Now().Unix() {
+		return errors.New("JWT Token is expired")
+	}
+
+	userIDFloat, ok := claims["userID"].(float64)
+	if !ok {
+		return errors.New("userID claim is not a float64")
+	}
+	userID := int(userIDFloat)
+
+	data, err := u.usecase.Me(int(userID))
+
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(data)
 }
