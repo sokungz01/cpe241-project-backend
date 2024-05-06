@@ -8,27 +8,24 @@ import (
 )
 
 type MachineController interface {
-	GetAllMachine(c *fiber.Ctx) error
-
 	CreateMachineType(c *fiber.Ctx) error
+	GetAllMachineType(c *fiber.Ctx) error
+	GetOneMachineTypeByID(c *fiber.Ctx) error
 	GetOneMachineTypeByName(c *fiber.Ctx) error
 	UpdateMachineType(c *fiber.Ctx) error
 	DeleteMachineType(c *fiber.Ctx) error
 }
 
-type machineUseCase struct {
-	usecase domain.MachineUseCase
+type machineTypeUsecase struct {
+	usecase domain.MachineTypeUsecase
 }
 
-func NewmachineController(usecase domain.MachineUseCase) MachineController {
-	return &machineUseCase{usecase: usecase}
+func NewmachineController(usecase domain.MachineTypeUsecase) MachineController {
+	return &machineTypeUsecase{usecase: usecase}
 }
 
-func (mu *machineUseCase) GetAllMachine(c *fiber.Ctx) error {
-	return c.SendString("Kuay")
-}
 
-func (mu *machineUseCase) CreateMachineType(c *fiber.Ctx) error {
+func (mu *machineTypeUsecase) CreateMachineType(c *fiber.Ctx) error {
 	newMachineType := new(domain.MachineType)
 	var err error
 	if err := c.BodyParser(newMachineType); err != nil {
@@ -44,7 +41,27 @@ func (mu *machineUseCase) CreateMachineType(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(newMachineType)
 }
 
-func (mu *machineUseCase) GetOneMachineTypeByName(c *fiber.Ctx) error {
+func (mu *machineTypeUsecase) GetOneMachineTypeByID(c *fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
+	}
+	response, err2 := mu.usecase.GetOneMachineTypeByID(id)
+	if err2 != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(err2.Error())
+	}
+	return c.Status(fiber.StatusOK).JSON(response)
+}
+
+func (mu *machineTypeUsecase) GetAllMachineType(c *fiber.Ctx) error {
+	response, err := mu.usecase.GetAllMachineType()
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
+	}
+	return c.Status(fiber.StatusOK).JSON(response)
+}
+
+func (mu *machineTypeUsecase) GetOneMachineTypeByName(c *fiber.Ctx) error {
 	parse := new(domain.MachineType)
 	if err := c.BodyParser(parse); err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
@@ -56,7 +73,7 @@ func (mu *machineUseCase) GetOneMachineTypeByName(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(response)
 }
 
-func (mu *machineUseCase) UpdateMachineType(c *fiber.Ctx) error {
+func (mu *machineTypeUsecase) UpdateMachineType(c *fiber.Ctx) error {
 	Data := new(domain.MachineType)
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
@@ -72,7 +89,7 @@ func (mu *machineUseCase) UpdateMachineType(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(Data)
 }
 
-func (mu *machineUseCase) DeleteMachineType(c *fiber.Ctx) error {
+func (mu *machineTypeUsecase) DeleteMachineType(c *fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())

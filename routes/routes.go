@@ -23,10 +23,10 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	positionRepo := repository.NewPositionRepository(myDB)
 	positionUsecase := usecase.NewPositionUsecase(positionRepo)
 	positionController := controller.NewPositionController(positionUsecase)
-	
-	machineRepo := repository.NewmachineRepository(myDB)
-	machineUsecase := usecase.NewMachineUsecase(machineRepo)
-	machineController := controller.NewmachineController(machineUsecase)
+
+	machineTypeRepo := repository.NewmachineTypeRepository(myDB)
+	machineTypeUsecase := usecase.NewMachineTypeUsecase(machineTypeRepo)
+	machineTypeController := controller.NewmachineController(machineTypeUsecase)
 
 	authGroup := app.Group("/auth")
 	authGroup.Get("/me", jwt, authController.Me)
@@ -37,15 +37,16 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	userGroup.Get("/all", jwt, userController.GetAll)
 
 	positionGroup := app.Group("/position")
-	positionGroup.Get("/",positionController.GetAll)
-	positionGroup.Get("/findbypositionname",positionController.GetByPositionName)
-	positionGroup.Post("/",positionController.CreatePosition)
+	positionGroup.Get("/", positionController.GetAll)
+	positionGroup.Get("/findbypositionname", positionController.GetByPositionName)
+	positionGroup.Post("/", positionController.CreatePosition)
 
 	machineGroup := app.Group("/machine")
-	machineGroup.Get("/",machineController.GetAllMachine)
 
-	machineGroup.Get("/MachineType",machineController.GetOneMachineTypeByName)
-	machineGroup.Post("/MachineType",machineController.CreateMachineType)
-	machineGroup.Put("/MachineType/:id",machineController.UpdateMachineType)
-	machineGroup.Delete("/MachineType/:id",machineController.DeleteMachineType)
+	machineGroup.Get("/MachineType", machineTypeController.GetAllMachineType)
+	machineGroup.Get("/MachineType/:id", machineTypeController.GetOneMachineTypeByID)
+	machineGroup.Get("/MachineType/getbyname", machineTypeController.GetOneMachineTypeByName)
+	machineGroup.Post("/MachineType", machineTypeController.CreateMachineType)
+	machineGroup.Put("/MachineType/:id", machineTypeController.UpdateMachineType)
+	machineGroup.Delete("/MachineType/:id", machineTypeController.DeleteMachineType)
 }

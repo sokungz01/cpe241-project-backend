@@ -7,25 +7,16 @@ import (
 	"github.com/sokungz01/cpe241-project-backend/platform"
 )
 
-type machineRepository struct {
+type machineTypeRepository struct {
 	db *platform.Mysql
 }
 
-func NewmachineRepository(db *platform.Mysql) domain.MachineRepository {
-	return &machineRepository{db: db}
+func NewmachineTypeRepository(db *platform.Mysql) domain.MachineTypeRepository {
+	return &machineTypeRepository{db: db}
 }
 
-func (m *machineRepository) GetAll() (*[]domain.Machine, error) {
-	response := make([]domain.Machine, 0)
-	err := m.db.Select(&response, "SELECT *"+
-		"FROM `machine`")
-	if err != nil {
-		return nil, err
-	}
-	return &response, nil
-}
 
-func (m *machineRepository) CreateMachineType(mtype domain.MachineType) error {
+func (m *machineTypeRepository) CreateMachineType(mtype domain.MachineType) error {
 	_, err := m.db.NamedExec("INSERT INTO `machineType` (`machineTypeName`)"+
 		"VALUE (:machineTypeName)", mtype)
 	if err != nil {
@@ -34,7 +25,15 @@ func (m *machineRepository) CreateMachineType(mtype domain.MachineType) error {
 	return nil
 }
 
-func (m *machineRepository) GetOneMachineTypeByName(typeName string) (*domain.MachineType, error) {
+func (m *machineTypeRepository) GetAllMachineType() (*[]domain.MachineType,error) {
+	response := make([]domain.MachineType,0)
+	if err := m.db.Select(&response,"SELECT * FROM `machineType`");err != nil{
+		return nil,err
+	}
+	return &response,nil
+}
+
+func (m *machineTypeRepository) GetOneMachineTypeByName(typeName string) (*domain.MachineType, error) {
 	response := new(domain.MachineType)
 	err := m.db.Get(response, "SELECT *"+
 		"FROM `machineType`"+
@@ -45,7 +44,7 @@ func (m *machineRepository) GetOneMachineTypeByName(typeName string) (*domain.Ma
 	return response, nil
 }
 
-func (m *machineRepository) GetOneMachineTypeByID(id int) (*domain.MachineType, error) {
+func (m *machineTypeRepository) GetOneMachineTypeByID(id int) (*domain.MachineType, error) {
 	response := new(domain.MachineType)
 	err := m.db.Get(response, "SELECT *"+
 		"FROM `machineType`"+
@@ -56,7 +55,7 @@ func (m *machineRepository) GetOneMachineTypeByID(id int) (*domain.MachineType, 
 	return response, nil
 }
 
-func (m *machineRepository) UpDateMachineType(id int, newData domain.MachineType) (*domain.MachineType, error) {
+func (m *machineTypeRepository) UpDateMachineType(id int, newData domain.MachineType) (*domain.MachineType, error) {
 	response := new(domain.MachineType)
 	_, err := m.db.Exec("UPDATE `machineType`"+
 		"SET `machineTypeName` = ? WHERE `machineTypeID` = ?", newData.MachineTypeName, id)
@@ -71,7 +70,7 @@ func (m *machineRepository) UpDateMachineType(id int, newData domain.MachineType
 	return response, nil
 }
 
-func (m *machineRepository) DeleteMachineType(id int) error {
+func (m *machineTypeRepository) DeleteMachineType(id int) error {
 	_, err := m.db.Exec("DELETE FROM `machineType` WHERE `machineTypeID` = ?", id)
 	if err != nil {
 		return err
