@@ -7,7 +7,7 @@ import (
 	"github.com/sokungz01/cpe241-project-backend/domain"
 )
 
-type MachineController interface {
+type MachineTypeController interface {
 	CreateMachineType(c *fiber.Ctx) error
 	GetAllMachineType(c *fiber.Ctx) error
 	GetOneMachineTypeByID(c *fiber.Ctx) error
@@ -20,7 +20,7 @@ type machineTypeUsecase struct {
 	usecase domain.MachineTypeUsecase
 }
 
-func NewmachineController(usecase domain.MachineTypeUsecase) MachineController {
+func NewmachineController(usecase domain.MachineTypeUsecase) MachineTypeController {
 	return &machineTypeUsecase{usecase: usecase}
 }
 

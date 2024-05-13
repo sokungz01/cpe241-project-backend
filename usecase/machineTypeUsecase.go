@@ -6,16 +6,16 @@ import (
 	"github.com/sokungz01/cpe241-project-backend/domain"
 )
 
-type machineUsecase struct {
+type machineTypeUsecase struct {
 	repo domain.MachineTypeRepository
 }
 
 func NewMachineTypeUsecase(repo domain.MachineTypeRepository) domain.MachineTypeUsecase {
-	return &machineUsecase{repo: repo}
+	return &machineTypeUsecase{repo: repo}
 }
 
 
-func (mr *machineUsecase) CreateMachineType(mtype domain.MachineType) error {
+func (mr *machineTypeUsecase) CreateMachineType(mtype domain.MachineType) error {
 
 	resp, _ := mr.GetOneMachineTypeByName(mtype.MachineTypeName)
 	if resp != nil {
@@ -27,7 +27,7 @@ func (mr *machineUsecase) CreateMachineType(mtype domain.MachineType) error {
 	return nil
 }
 
-func (mr *machineUsecase) GetAllMachineType() (*[]domain.MachineType,error){
+func (mr *machineTypeUsecase) GetAllMachineType() (*[]domain.MachineType,error){
 	response,err := mr.repo.GetAllMachineType()
 	if err != nil{
 		return nil,err
@@ -35,7 +35,7 @@ func (mr *machineUsecase) GetAllMachineType() (*[]domain.MachineType,error){
 	return response,nil
 }
 
-func (mr *machineUsecase) GetOneMachineTypeByName(typeName string) (*domain.MachineType, error) {
+func (mr *machineTypeUsecase) GetOneMachineTypeByName(typeName string) (*domain.MachineType, error) {
 	response, err := mr.repo.GetOneMachineTypeByName(typeName)
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func (mr *machineUsecase) GetOneMachineTypeByName(typeName string) (*domain.Mach
 	return response, nil
 }
 
-func (mr *machineUsecase) GetOneMachineTypeByID(id int) (*domain.MachineType, error){
+func (mr *machineTypeUsecase) GetOneMachineTypeByID(id int) (*domain.MachineType, error){
 	response,err := mr.repo.GetOneMachineTypeByID(id)
 	if err != nil{
 		return nil,err
@@ -51,7 +51,7 @@ func (mr *machineUsecase) GetOneMachineTypeByID(id int) (*domain.MachineType, er
 	return response,nil
 }
 
-func (mr *machineUsecase) UpDateMachineType(id int, newData domain.MachineType) (*domain.MachineType, error) {
+func (mr *machineTypeUsecase) UpDateMachineType(id int, newData domain.MachineType) (*domain.MachineType, error) {
 	response, err := mr.repo.UpDateMachineType(id, newData)
 	if err != nil {
 		return nil, err
@@ -59,7 +59,7 @@ func (mr *machineUsecase) UpDateMachineType(id int, newData domain.MachineType) 
 	return response, nil
 }
 
-func (mr *machineUsecase) DeleteMachineType(id int) error {
+func (mr *machineTypeUsecase) DeleteMachineType(id int) error {
 
 	if _, err := mr.repo.GetOneMachineTypeByID(id); err != nil {
 		return err
