@@ -5,7 +5,6 @@ import (
 	//"fmt"
 
 	"github.com/sokungz01/cpe241-project-backend/domain"
-	_ "github.com/sokungz01/cpe241-project-backend/repository"
 )
 
 type machineUsecase struct {
@@ -29,18 +28,18 @@ func (m *machineUsecase) CreateMachine(newMachine *domain.Machine) (*domain.Mach
 	return nil, nil
 }
 
-func (m *machineUsecase) GetAllMachine() (*[]domain.Machine,error){
-	respose,err := m.machineRepo.GetAllMachine()
-	if err != nil{
-		return nil,err
+func (m *machineUsecase) GetAllMachine() (*[]domain.Machine, error) {
+	respose, err := m.machineRepo.GetAllMachine()
+	if err != nil {
+		return nil, err
 	}
-	return respose,nil
+	return respose, nil
 }
 
-func (m *machineUsecase) GetMachineByID(id int) (*domain.Machine,error){
-	response,err := m.machineRepo.GetMachineByID(id)
+func (m *machineUsecase) GetMachineByID(id int) (*domain.Machine, error) {
+	response, err := m.machineRepo.GetMachineByID(id)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
-	return response,nil
+	return response, nil
 }

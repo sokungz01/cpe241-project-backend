@@ -8,7 +8,6 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
-	jtoken "github.com/golang-jwt/jwt/v4"
 	"github.com/sokungz01/cpe241-project-backend/config"
 	"github.com/sokungz01/cpe241-project-backend/domain"
 )
@@ -37,7 +36,7 @@ func (u *authenUsecase) SignIn(c *fiber.Ctx) error {
 	}
 	day := time.Hour * 24
 	// Create the JWT claims, which includes the user ID and expiry time
-	claims := jtoken.MapClaims{
+	claims := jwt.MapClaims{
 		"userID":     AuthResponse.ID,
 		"positionID": AuthResponse.Position,
 		"exp":        time.Now().Add(day * 1).Unix(),
@@ -47,7 +46,7 @@ func (u *authenUsecase) SignIn(c *fiber.Ctx) error {
 	if err != nil {
 		log.Fatal("Can't load config", err)
 	}
-	token := jtoken.NewWithClaims(jtoken.SigningMethodHS256, claims)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	t, err := token.SignedString([]byte(cfg.JWT_ACCESS_TOKEN))
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{

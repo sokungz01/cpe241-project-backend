@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	"github.com/sokungz01/cpe241-project-backend/domain"
-	_ "github.com/sokungz01/cpe241-project-backend/repository"
 	"golang.org/x/crypto/bcrypt"
 )
 
