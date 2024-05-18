@@ -4,6 +4,7 @@ type User struct {
 	Id        int     `json:"id" db:"employeeID"`
 	FirstName string  `json:"fname" db:"name"`
 	LastName  string  `json:"lname" db:"surname"`
+	ImageURL  string  `json:"imageURL" db:"imageURL"`
 	Position  int     `json:"position" db:"positionID"`
 	Bonus     float64 `json:"bonus" db:"bonus"`
 	Email     string  `json:"email" db:"email"`
