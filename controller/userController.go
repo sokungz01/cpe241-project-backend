@@ -10,6 +10,7 @@ import (
 type UserController interface {
 	SignUp(c *fiber.Ctx) error
 	GetAll(c *fiber.Ctx) error
+	GetByUserID(c *fiber.Ctx) error
 	UpdateUser(c *fiber.Ctx) error
 	Hello(c *fiber.Ctx) error
 }
@@ -56,6 +57,19 @@ func (u *userUsecase) UpdateUser(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString(updateErr.Error())
 	}
 	return c.Status(fiber.StatusOK).JSON(response)
+}
+
+func (u *userUsecase) GetByUserID(c *fiber.Ctx) error {
+	id, convError := strconv.Atoi(c.Params("id"))
+	if convError != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(convError.Error())
+	}
+	response, getError := u.usecase.GetById(id)
+	if getError != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(getError.Error())
+	}
+	return c.Status(fiber.StatusOK).JSON(response)
+
 }
 
 func (u *userUsecase) Hello(c *fiber.Ctx) error {

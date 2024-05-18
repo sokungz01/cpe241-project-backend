@@ -44,6 +44,18 @@ func (m *machineRepository) GetMachineByID(id int) (*domain.Machine, error) {
 	return response, nil
 }
 
+func (m *machineRepository) GetMachineByName(machineName string) (*domain.Machine, error) {
+	response := new(domain.Machine)
+	queryStr := "%" + machineName
+	err := m.db.Get(response, "SELECT *"+
+		"FROM `machine`"+
+		"WHERE `machineName` "+queryStr)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 func (m *machineRepository) UpdateMachineData(id int, newMachineData *domain.Machine) error {
 	_, err := m.db.Exec("UPDATE `machine`"+
 		"SET `machineName`= ?,`machineBrand`= ?,`machineTypeID`= ?,`startDate`= ?,`endDate`= ?,`description`= ?,`status`= ? WHERE `machineID`= ?", newMachineData.MachineName, newMachineData.MachineBrand, newMachineData.MachineTypeID, newMachineData.StartDate, newMachineData.EndDate, newMachineData.Description, newMachineData.Status, id)

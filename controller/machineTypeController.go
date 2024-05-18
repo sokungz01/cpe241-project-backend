@@ -24,7 +24,6 @@ func NewmachineController(usecase domain.MachineTypeUsecase) MachineTypeControll
 	return &machineTypeUsecase{usecase: usecase}
 }
 
-
 func (mu *machineTypeUsecase) CreateMachineType(c *fiber.Ctx) error {
 	newMachineType := new(domain.MachineType)
 	var err error

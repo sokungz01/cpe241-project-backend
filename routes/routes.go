@@ -40,6 +40,7 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 
 	userGroup := app.Group("/user")
 	userGroup.Get("/all", jwt, userController.GetAll)
+	userGroup.Get("/:id", jwt, userController.GetByUserID)
 
 	positionGroup := app.Group("/position")
 	positionGroup.Get("/", positionController.GetAll)
@@ -48,6 +49,7 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 
 	machineGroup := app.Group("/machine")
 	machineGroup.Get("/", machineController.GetAllMachine)
+	machineGroup.Get("/getbyname", machineController.GetMachineByName)
 	machineGroup.Get("/:id", machineController.GetMachineByID)
 	machineGroup.Put("/:id", machineController.UpdateMachineData)
 	machineGroup.Post("/", machineController.CreateMachine)

@@ -51,6 +51,14 @@ func (m *machineUsecase) DeleteMachine(id int) error {
 	return m.machineRepo.DeleteMachine(id)
 }
 
+func (m *machineUsecase) GetMachineByName(machineName string) (*domain.Machine, error) {
+	response, err := m.machineRepo.GetMachineByName(machineName)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 func (m *machineUsecase) UpdateMachineData(id int, newMachineData *domain.Machine) (*domain.Machine, error) {
 	_, getErr := m.GetMachineByID(id)
 	if getErr != nil {
