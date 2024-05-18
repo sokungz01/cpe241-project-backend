@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"strconv"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/sokungz01/cpe241-project-backend/domain"
 )
@@ -8,6 +10,8 @@ import (
 type UserController interface {
 	SignUp(c *fiber.Ctx) error
 	GetAll(c *fiber.Ctx) error
+	GetByUserID(c *fiber.Ctx) error
+	UpdateUser(c *fiber.Ctx) error
 	Hello(c *fiber.Ctx) error
 }
 
@@ -36,6 +40,36 @@ func (u *userUsecase) GetAll(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString("Pung I here")
 	}
 	return c.Status(fiber.StatusOK).JSON(users)
+}
+
+func (u *userUsecase) UpdateUser(c *fiber.Ctx) error {
+	id, parseErr := strconv.Atoi(c.Params("id"))
+	newUserData := new(domain.User)
+	if parseErr != nil {
+		return c.SendStatus(fiber.StatusInternalServerError)
+	}
+	parseErrStruct := c.BodyParser(newUserData)
+	if parseErrStruct != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(parseErrStruct.Error())
+	}
+	response, updateErr := u.usecase.UpdateUser(id, newUserData)
+	if updateErr != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(updateErr.Error())
+	}
+	return c.Status(fiber.StatusOK).JSON(response)
+}
+
+func (u *userUsecase) GetByUserID(c *fiber.Ctx) error {
+	id, convError := strconv.Atoi(c.Params("id"))
+	if convError != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(convError.Error())
+	}
+	response, getError := u.usecase.GetById(id)
+	if getError != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(getError.Error())
+	}
+	return c.Status(fiber.StatusOK).JSON(response)
+
 }
 
 func (u *userUsecase) Hello(c *fiber.Ctx) error {

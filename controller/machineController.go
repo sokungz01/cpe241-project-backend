@@ -11,6 +11,9 @@ type MachineController interface {
 	CreateMachine(c *fiber.Ctx) error
 	GetAllMachine(c *fiber.Ctx) error
 	GetMachineByID(c *fiber.Ctx) error
+	GetMachineByName(c *fiber.Ctx) error
+	UpdateMachineData(c *fiber.Ctx) error
+	DeleteMachine(c *fiber.Ctx) error
 }
 
 type machineController struct {
@@ -54,4 +57,47 @@ func (m *machineController) GetMachineByID(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString(errorResponse.Error())
 	}
 	return c.Status(fiber.StatusOK).JSON(response)
+}
+
+func (m *machineController) GetMachineByName(c *fiber.Ctx) error {
+	input := new(domain.Machine)
+	parseError := c.BodyParser(input)
+	if parseError != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(parseError.Error())
+	}
+	response, getErr := m.usecase.GetMachineByName(input.MachineName)
+	if getErr != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(getErr.Error())
+	}
+	return c.Status(fiber.StatusOK).JSON(response)
+}
+
+func (m *machineController) UpdateMachineData(c *fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
+	newMachineData := new(domain.Machine)
+
+	if parseErr := c.BodyParser(newMachineData); parseErr != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(parseErr.Error())
+	}
+
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
+	}
+	response, updateError := m.usecase.UpdateMachineData(id, newMachineData)
+	if updateError != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(updateError.Error())
+	}
+	return c.Status(fiber.StatusOK).JSON(response)
+}
+
+func (m *machineController) DeleteMachine(c *fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
+	}
+	errDelete := m.usecase.DeleteMachine(id)
+	if errDelete != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(errDelete.Error())
+	}
+	return c.SendStatus(fiber.StatusOK)
 }

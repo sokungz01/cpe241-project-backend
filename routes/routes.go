@@ -36,9 +36,11 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	authGroup.Get("/me", jwt, authController.Me)
 	authGroup.Post("/signup", userController.SignUp)
 	authGroup.Post("/signin", authController.SignIn)
+	authGroup.Put("/update/:id", jwt, userController.UpdateUser)
 
 	userGroup := app.Group("/user")
 	userGroup.Get("/all", jwt, userController.GetAll)
+	userGroup.Get("/:id", jwt, userController.GetByUserID)
 
 	positionGroup := app.Group("/position")
 	positionGroup.Get("/", positionController.GetAll)
@@ -47,13 +49,18 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 
 	machineGroup := app.Group("/machine")
 	machineGroup.Get("/", machineController.GetAllMachine)
+	machineGroup.Get("/getbyname", machineController.GetMachineByName)
 	machineGroup.Get("/:id", machineController.GetMachineByID)
+	machineGroup.Put("/:id", machineController.UpdateMachineData)
 	machineGroup.Post("/", machineController.CreateMachine)
+	machineGroup.Delete("/:id", machineController.DeleteMachine)
 
-	machineGroup.Get("/MachineType", machineTypeController.GetAllMachineType)
-	machineGroup.Get("/MachineType/:id", machineTypeController.GetOneMachineTypeByID)
-	machineGroup.Get("/MachineType/getbyname", machineTypeController.GetOneMachineTypeByName)
-	machineGroup.Post("/MachineType", machineTypeController.CreateMachineType)
-	machineGroup.Put("/MachineType/:id", machineTypeController.UpdateMachineType)
-	machineGroup.Delete("/MachineType/:id", machineTypeController.DeleteMachineType)
+	machineTypeGroup := app.Group("/machinetype")
+	machineTypeGroup.Get("/", machineTypeController.GetAllMachineType)
+	machineTypeGroup.Get("/:id", machineTypeController.GetOneMachineTypeByID)
+	machineTypeGroup.Get("/getbyname", machineTypeController.GetOneMachineTypeByName)
+	machineTypeGroup.Post("/", machineTypeController.CreateMachineType)
+	machineTypeGroup.Put("/:id", machineTypeController.UpdateMachineType)
+	machineTypeGroup.Delete("/:id", machineTypeController.DeleteMachineType)
+
 }
