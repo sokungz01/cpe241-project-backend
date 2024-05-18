@@ -10,8 +10,10 @@ services:
     restart: on-failure
     depends_on:
       - mysql
+    env_file:
+      - .env
     environment:
-      DB_URL: ${DB_URL}
+      - DB_URL=${DB_URL}
 
   mysql:
     image: mysql:latest
