@@ -2,7 +2,7 @@ package controller
 
 import (
 	"strconv"
-	//"strings"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/sokungz01/cpe241-project-backend/domain"
 )
@@ -65,7 +65,6 @@ func (m *machineController) GetMachineByName(c *fiber.Ctx) error {
 	if parseError != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString(parseError.Error())
 	}
-	//machineName := strings.Trim(input.MachineName,)
 	response, getErr := m.usecase.GetMachineByName(input.MachineName)
 	if getErr != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString(getErr.Error())

@@ -44,12 +44,12 @@ func (m *machineRepository) GetMachineByID(id int) (*domain.Machine, error) {
 	return response, nil
 }
 
-func (m *machineRepository) GetMachineByName(machineName string) (*domain.Machine, error) {
-	response := new(domain.Machine)
-	queryStr := machineName
-	err := m.db.Get(response, "SELECT *"+
+func (m *machineRepository) GetMachineByName(machineName string) (*[]domain.Machine, error) {
+	response := new([]domain.Machine)
+	queryStr := "'%" + machineName + "%'"
+	err := m.db.Select(response, "SELECT *"+
 		"FROM `machine`"+
-		"WHERE `machineName` "+queryStr)
+		"WHERE `machineName` LIKE "+queryStr)
 	if err != nil {
 		return nil, err
 	}

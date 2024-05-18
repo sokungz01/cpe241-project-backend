@@ -51,7 +51,7 @@ func (m *machineUsecase) DeleteMachine(id int) error {
 	return m.machineRepo.DeleteMachine(id)
 }
 
-func (m *machineUsecase) GetMachineByName(machineName string) (*domain.Machine, error) {
+func (m *machineUsecase) GetMachineByName(machineName string) (*[]domain.Machine, error) {
 	response, err := m.machineRepo.GetMachineByName(machineName)
 	if err != nil {
 		return nil, err
