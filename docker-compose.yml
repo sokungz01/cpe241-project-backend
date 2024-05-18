@@ -11,7 +11,7 @@ services:
     depends_on:
       - mysql
     environment:
-      DB_URL: root:CPE241!sornrubsom@tcp(mysql:3306)/sornrubsom
+      DB_URL: ${DB_URL}
 
   mysql:
     image: mysql:latest
