@@ -34,4 +34,4 @@ jobs:
             cd /home/sokungz/cpe241/backend
             docker compose down
             echo "${{ secrets.ENV }}" >> .env
-            docker compose up -d --build
+            docker compose --env-file .env up -d --build
