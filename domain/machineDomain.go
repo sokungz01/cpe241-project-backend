@@ -17,10 +17,14 @@ type MachineRepository interface {
 	CreateMachine(newMachine *Machine) (*Machine, error)
 	GetAllMachine() (*[]Machine, error)
 	GetMachineByID(id int) (*Machine, error)
+	UpdateMachineData(id int, newMachineData *Machine) error
+	DeleteMachine(id int) error
 }
 
 type MachineUsecase interface {
 	CreateMachine(newMachine *Machine) (*Machine, error)
 	GetAllMachine() (*[]Machine, error)
 	GetMachineByID(id int) (*Machine, error)
+	UpdateMachineData(id int, newMachineData *Machine) (*Machine,error)
+	DeleteMachine(id int)error
 }

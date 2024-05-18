@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"errors"
-	//"fmt"
 
 	"github.com/sokungz01/cpe241-project-backend/domain"
 )
@@ -40,6 +39,30 @@ func (m *machineUsecase) GetMachineByID(id int) (*domain.Machine, error) {
 	response, err := m.machineRepo.GetMachineByID(id)
 	if err != nil {
 		return nil, err
+	}
+	return response, nil
+}
+
+func (m *machineUsecase) DeleteMachine(id int) error {
+	_, err := m.GetMachineByID(id)
+	if err != nil {
+		return err
+	}
+	return m.machineRepo.DeleteMachine(id)
+}
+
+func (m *machineUsecase) UpdateMachineData(id int, newMachineData *domain.Machine) (*domain.Machine, error) {
+	_, getErr := m.GetMachineByID(id)
+	if getErr != nil {
+		return nil, getErr
+	}
+	updateErr := m.machineRepo.UpdateMachineData(id, newMachineData)
+	if updateErr != nil {
+		return nil, updateErr
+	}
+	response, checkoutGetErr := m.GetMachineByID(id)
+	if checkoutGetErr != nil {
+		return nil, checkoutGetErr
 	}
 	return response, nil
 }
