@@ -14,8 +14,8 @@ func NewUSerRepository(db *platform.Mysql) domain.UserRepository {
 }
 
 func (s *userRepository) Create(newUser *domain.User) error {
-	_, err := s.db.NamedExec("INSERT INTO `employee` (name,surname,email,password)"+
-		"VALUE (:name,:surname,:email,:password)",
+	_, err := s.db.NamedExec("INSERT INTO `employee` (name,surname,imageURL,bonus,positionID,email,password)"+
+		"VALUE (:name,:surname,:imageURL,:bonus,:positionID,:email,:password)",
 		newUser)
 	if err != nil {
 		return err
