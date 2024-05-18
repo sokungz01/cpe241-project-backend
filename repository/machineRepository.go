@@ -16,8 +16,8 @@ func NewmachineRepository(db *platform.Mysql) domain.MachineRepository {
 }
 
 func (m *machineRepository) CreateMachine(newMachine *domain.Machine) (*domain.Machine, error) {
-	_, err := m.db.NamedExec("INSERT INTO `machine` (`machineName`,`machineBrand`,`machineTypeID`,`startDate`,`endDate`,`description`,`status`)"+
-		"VALUE (:machineName,:machineBrand,:machineTypeID,:startDate,:endDate,:description,:status)", newMachine)
+	_, err := m.db.NamedExec("INSERT INTO `machine` (`machineName`,`machineBrand`,`machineTypeID`,`startDate`,`description`,`status`)"+
+		"VALUE (:machineName,:machineBrand,:machineTypeID,:startDate,:description,:status)", newMachine)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (m *machineRepository) GetMachineByID(id int) (*domain.Machine, error) {
 
 func (m *machineRepository) GetMachineByName(machineName string) (*domain.Machine, error) {
 	response := new(domain.Machine)
-	queryStr := "%" + machineName
+	queryStr := machineName
 	err := m.db.Get(response, "SELECT *"+
 		"FROM `machine`"+
 		"WHERE `machineName` "+queryStr)
