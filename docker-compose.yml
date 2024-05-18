@@ -12,6 +12,8 @@ services:
       - mysql
     environment:
       DB_URL: ${DB_URL}
+    env_file:
+      - .env
 
   mysql:
     image: mysql:latest
