@@ -58,25 +58,23 @@ func (m *machineController) GetMachineByID(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(response)
 }
 
-func (m *machineController) UpdateMachineData(c *fiber.Ctx) error{
-	id,err := strconv.Atoi(c.Params("id"))
+func (m *machineController) UpdateMachineData(c *fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
 	newMachineData := new(domain.Machine)
 
-	if parseErr := c.BodyParser(newMachineData); parseErr != nil{
+	if parseErr := c.BodyParser(newMachineData); parseErr != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString(parseErr.Error())
 	}
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
 	}
-	response,updateError := m.usecase.UpdateMachineData(id,newMachineData)
+	response, updateError := m.usecase.UpdateMachineData(id, newMachineData)
 	if updateError != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString(updateError.Error())
 	}
 	return c.Status(fiber.StatusOK).JSON(response)
 }
-
-
 
 func (m *machineController) DeleteMachine(c *fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))

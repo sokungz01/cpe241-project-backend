@@ -32,11 +32,11 @@ func (u *userUseCase) Create(newUser *domain.User) error {
 		return err
 	}
 	newUser.Password = string(hashedPassword)
-	if err := u.userRepository.Create(newUser); err != nil{
+	if err := u.userRepository.Create(newUser); err != nil {
 		return err
 	}
 
-	//return nil for no error 
+	//return nil for no error
 	return nil
 }
 
@@ -62,6 +62,18 @@ func (u *userUseCase) GetAll() (*[]domain.User, error) {
 		return nil, err
 	}
 	return resp, nil
+}
+
+func (u *userUseCase) UpdateUser(id int, newUser *domain.User) (*domain.User, error) {
+	if err := u.userRepository.UpdateUser(id, newUser); err != nil {
+		return nil, err
+	}
+	response, err := u.GetById(id)
+	response.Password = ""
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
 }
 
 func MailValidator(address string) error {

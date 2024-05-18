@@ -17,6 +17,7 @@ type UserRepository interface {
 	GetByEmail(email string) (*User, error)
 	Getall() (*[]User, error)
 	DeleteUser(user *User) error
+	UpdateUser(id int, newUser *User) error
 	//GetBymail(email string) *User
 }
 
@@ -25,4 +26,5 @@ type UserUseCase interface {
 	GetById(id int) (*User, error)
 	GetByEmail(email string) (*User, error)
 	GetAll() (*[]User, error)
+	UpdateUser(id int, newUser *User) (*User, error)
 }

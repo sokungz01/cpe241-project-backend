@@ -54,3 +54,10 @@ func (s *userRepository) Getall() (*[]domain.User, error) {
 func (s *userRepository) DeleteUser(user *domain.User) error {
 	return nil
 }
+
+func (s *userRepository) UpdateUser(id int, newUser *domain.User) error {
+	_, err := s.db.Exec("UPDATE `employee`"+
+		"SET `name` = ?,`surname` = ?, `imageURL` = ?,`positionID` = ?,`bonus`=?,`email` = ? WHERE `employeeID` = ?",
+		newUser.FirstName, newUser.LastName, newUser.ImageURL, newUser.Position, newUser.Bonus, newUser.Email, id)
+	return err
+}
