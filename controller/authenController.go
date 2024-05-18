@@ -37,7 +37,7 @@ func (u *authenUsecase) SignIn(c *fiber.Ctx) error {
 	day := time.Hour * 24
 	// Create the JWT claims, which includes the user ID and expiry time
 	claims := jwt.MapClaims{
-		"userID":     AuthResponse.ID,
+		"userID":     AuthResponse.Id,
 		"positionID": AuthResponse.Position,
 		"exp":        time.Now().Add(day * 1).Unix(),
 	}
@@ -90,11 +90,13 @@ func (u *authenUsecase) Me(c *fiber.Ctx) error {
 	}
 	userID := int(userIDFloat)
 
-	data, err := u.usecase.Me(int(userID))
+	AuthResponse, err := u.usecase.Me(int(userID))
 
 	if err != nil {
 		return err
 	}
-
-	return c.JSON(data)
+	AuthResponse.Password = ""
+	return c.JSON(domain.AuthenResponse{
+		Data: *AuthResponse,
+	})
 }

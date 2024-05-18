@@ -28,9 +28,11 @@ func (u *authenUsecase) SignIn(user *domain.AuthenPayload) (*domain.AuthenPayloa
 	if bcrypt.CompareHashAndPassword([]byte(AuthResponse.Password), []byte(user.Password)) != nil {
 		return nil, errors.New("signin : Password not match")
 	}
+	AuthResponse.Password = ""
 	return AuthResponse, nil
 }
 func (u *authenUsecase) Me(userID int) (*domain.AuthenDetail, error) {
+
 	if userID == 0 {
 		return nil, errors.New("invalid userID")
 	}

@@ -1,21 +1,25 @@
 package domain
 
 type AuthenPayload struct {
-	ID       int    `json:"id" db:"employeeID"`
+	Id       int    `json:"id" db:"employeeID"`
 	Email    string `json:"email" db:"email"`
+	Position int    `json:"positionID" db:"positionID"`
 	Password string `json:"password,omitempty" db:"password"`
-	Position int    `json:"positionID,omitempty" db:"positionID"`
 }
 
 type AuthenDetail struct {
 	Id        int    `json:"id" db:"employeeID"`
-	FirstName string `json:"fname" db:"name"`
-	LastName  string `json:"lname" db:"surname"`
-	Position  int    `json:"position" db:"positionID"`
+	FirstName string `json:"name" db:"name"`
+	LastName  string `json:"surname" db:"surname"`
+	ImageURL  string `json:"imageURL" db:"imageURL"`
+	Position  int    `json:"positionID" db:"positionID"`
+	Email     string `json:"email" db:"email"`
+	Password  string `json:"password,omitempty" db:"password"`
 }
 
 type AuthenResponse struct {
-	Token string `json:"token"`
+	Data  AuthenDetail `json:"data"`
+	Token string       `json:"token,omitempty"`
 }
 
 type AuthenUsecase interface {
