@@ -51,8 +51,10 @@ func (s *userRepository) Getall() (*[]domain.User, error) {
 	return &response, nil
 }
 
-func (s *userRepository) DeleteUser(user *domain.User) error {
-	return nil
+func (s *userRepository) DeleteUser(id int) error {
+	_, err := s.db.Exec("DELETE FROM `employee`"+
+		"WHERE `employeeID` = ?", id)
+	return err
 }
 
 func (s *userRepository) UpdateUser(id int, newUser *domain.User) error {

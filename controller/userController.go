@@ -12,6 +12,7 @@ type UserController interface {
 	GetAll(c *fiber.Ctx) error
 	GetByUserID(c *fiber.Ctx) error
 	UpdateUser(c *fiber.Ctx) error
+	DeleteUser(c *fiber.Ctx) error
 	Hello(c *fiber.Ctx) error
 }
 
@@ -57,6 +58,17 @@ func (u *userUsecase) UpdateUser(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString(updateErr.Error())
 	}
 	return c.Status(fiber.StatusOK).JSON(response)
+}
+
+func (u *userUsecase) DeleteUser(c *fiber.Ctx) error {
+	id, parseErr := strconv.Atoi(c.Params("id"))
+	if parseErr != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(parseErr.Error())
+	}
+	if err := u.usecase.DeleteUser(id); err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
+	}
+	return c.SendStatus(fiber.StatusOK)
 }
 
 func (u *userUsecase) GetByUserID(c *fiber.Ctx) error {
