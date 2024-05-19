@@ -43,8 +43,9 @@ func (s *userRepository) GetByEmail(email string) (*domain.User, error) {
 
 func (s *userRepository) Getall() (*[]domain.User, error) {
 	response := make([]domain.User, 0)
-	err := s.db.Select(&response, "SELECT `employeeID`,`name`,`surname`,`positionID`,`bonus`,`email`"+
+	err := s.db.Select(&response, "SELECT `employeeID`,`name`,`surname`,`imageURL`,`positionID`,`bonus`,`email`"+
 		"FROM `employee`")
+
 	if err != nil {
 		return nil, err
 	}
