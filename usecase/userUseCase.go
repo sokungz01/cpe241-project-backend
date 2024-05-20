@@ -76,6 +76,10 @@ func (u *userUseCase) UpdateUser(id int, newUser *domain.User) (*domain.User, er
 	return response, nil
 }
 
+func (u *userUseCase) DeleteUser(id int) error {
+	return u.userRepository.DeleteUser(id)
+}
+
 func MailValidator(address string) error {
 	_, err := mail.ParseAddress(address)
 	return err
