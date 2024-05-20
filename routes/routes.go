@@ -32,6 +32,10 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	machineUsecase := usecase.NewMachineUsecase(machineRepo, machineTypeUsecase)
 	machineController := controller.NewMachineController(machineUsecase)
 
+	itemCategoryRepo := repository.NewItemCategoryRepository(myDB)
+	itemCategoryUsecase := usecase.NewItemCategoryUsecase(itemCategoryRepo)
+	itemCategoryController := controller.NewItemCategoryController(itemCategoryUsecase)
+
 	authGroup := app.Group("/auth")
 	authGroup.Get("/me", jwt, authController.Me)
 	authGroup.Post("/signup", userController.SignUp)
@@ -62,5 +66,12 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	machineTypeGroup.Post("/", machineTypeController.CreateMachineType)
 	machineTypeGroup.Put("/:id", machineTypeController.UpdateMachineType)
 	machineTypeGroup.Delete("/:id", machineTypeController.DeleteMachineType)
+
+	itemCategory := app.Group("/itemCategory")
+	itemCategory.Get("/", itemCategoryController.GetAllItemCategory)
+	itemCategory.Get("/:id", itemCategoryController.FindByID)
+	itemCategory.Post("/", itemCategoryController.CreateItemCategory)
+	itemCategory.Put("/:id", itemCategoryController.UpdateItemCategory)
+	itemCategory.Delete("/:id", itemCategoryController.DeleteItemCategory)
 
 }
