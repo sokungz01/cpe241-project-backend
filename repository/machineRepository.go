@@ -66,7 +66,7 @@ func (m *machineRepository) UpdateMachineData(id int, newMachineData *domain.Mac
 }
 
 func (m *machineRepository) DeleteMachine(id int) error {
-	_, err := m.db.Exec("DELETE FROM `machine WHERE `machineID` = ?", id)
+	_, err := m.db.Exec("DELETE FROM `machine` WHERE `machineID` = ?", id)
 	if err != nil {
 		return err
 	}
