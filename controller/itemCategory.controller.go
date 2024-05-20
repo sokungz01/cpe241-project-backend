@@ -15,15 +15,15 @@ type ItemCategoryController interface {
 	DeleteItemCategory(ctx *fiber.Ctx) error
 }
 
-type controller struct {
+type itemCategoryController struct {
 	usecase domain.ItemCategoryUseCase
 }
 
 func NewItemCategoryController(usecase domain.ItemCategoryUseCase) ItemCategoryController {
-	return &controller{usecase: usecase}
+	return &itemCategoryController{usecase: usecase}
 }
 
-func (c *controller) CreateItemCategory(ctx *fiber.Ctx) error {
+func (c *itemCategoryController) CreateItemCategory(ctx *fiber.Ctx) error {
 	newItemCategory := new(domain.ItemCategory)
 	if err := ctx.BodyParser(newItemCategory); err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
@@ -35,7 +35,7 @@ func (c *controller) CreateItemCategory(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(response)
 }
 
-func (c *controller) GetAllItemCategory(ctx *fiber.Ctx) error {
+func (c *itemCategoryController) GetAllItemCategory(ctx *fiber.Ctx) error {
 	response, err := c.usecase.GetAllItemCategory()
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
@@ -43,7 +43,7 @@ func (c *controller) GetAllItemCategory(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(response)
 }
 
-func (c *controller) FindByID(ctx *fiber.Ctx) error {
+func (c *itemCategoryController) FindByID(ctx *fiber.Ctx) error {
 	id, err := strconv.Atoi(ctx.Params("id"))
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
@@ -55,7 +55,7 @@ func (c *controller) FindByID(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(response)
 }
 
-func (c *controller) UpdateItemCategory(ctx *fiber.Ctx) error {
+func (c *itemCategoryController) UpdateItemCategory(ctx *fiber.Ctx) error {
 	id, err := strconv.Atoi(ctx.Params("id"))
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
@@ -78,7 +78,7 @@ func (c *controller) UpdateItemCategory(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(response)
 }
 
-func (c *controller) DeleteItemCategory(ctx *fiber.Ctx) error {
+func (c *itemCategoryController) DeleteItemCategory(ctx *fiber.Ctx) error {
 	id, err := strconv.Atoi(ctx.Params("id"))
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
