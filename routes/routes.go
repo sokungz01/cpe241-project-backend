@@ -40,6 +40,10 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	itemUsecase := usecase.NewItemUsecase(itemRepo)
 	itemController := controller.NewItemController(itemUsecase)
 
+	itemLogRepo := repository.NewItemLogRepository(myDB)
+	itemLogUsecase := usecase.NewItemLogUsecase(itemLogRepo)
+	itemLogController := controller.NewItemLogController(itemLogUsecase)
+
 	authGroup := app.Group("/auth")
 	authGroup.Get("/me", jwt, authController.Me)
 	authGroup.Post("/signup", userController.SignUp)
@@ -85,5 +89,8 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	item.Post("/", itemController.CreateItem)
 	item.Put("/:id", itemController.UpdateItem)
 	item.Delete("/:id", itemController.DeleteItem)
+
+	itemLog := app.Group("/itemLog")
+	itemLog.Get("/", itemLogController.GetAll)
 
 }
