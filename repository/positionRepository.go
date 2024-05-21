@@ -15,7 +15,7 @@ func NewPositionRepository(db *platform.Mysql) domain.PositionRepository {
 
 func (p *positionRepository) Create(position *domain.Position) error {
 	_, err := p.db.NamedExec("INSERT INTO `position` (`positionName`,`positionSalary`)"+
-		"VALUE (:positionname,:positionsalary)", position)
+		"VALUE (:positionName,:positionSalary)", position)
 	if err != nil {
 		return err
 	}
@@ -31,6 +31,30 @@ func (p *positionRepository) FindByPositionName(positionName string) (*domain.Po
 		return nil, err
 	}
 	return response, nil
+}
+
+func (p *positionRepository) GetPositionByID(id int) (*domain.Position, error) {
+	response := new(domain.Position)
+	err := p.db.Get(response, "SELECT *"+
+		"FROM `position`"+
+		"WHERE `positionID` = ?", id)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+func (p *positionRepository) UpdatePosition(id int, newPositionData *domain.Position) error {
+	_, err := p.db.Exec("UPDATE `position`"+
+		"SET `positionName` = ?, `positionSalary` = ? WHERE `positionID` = ?",
+		newPositionData.PositionName, newPositionData.PositionSalary, id)
+	return err
+}
+
+func (p *positionRepository) DeletePosition(id int) error {
+	_, err := p.db.Exec("DELETE FROM `position`"+
+		"WHERE `positionID` = ?", id)
+	return err
 }
 
 func (p *positionRepository) GetAll() (*[]domain.Position, error) {

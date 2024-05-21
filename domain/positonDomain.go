@@ -9,11 +9,17 @@ type Position struct {
 type PositionRepository interface {
 	Create(position *Position) error
 	FindByPositionName(positionName string) (*Position, error)
+	GetPositionByID(id int) (*Position, error)
+	UpdatePosition(id int, newPositionData *Position) error
+	DeletePosition(id int) error
 	GetAll() (*[]Position, error)
 }
 
 type PositionUsecase interface {
 	Create(position *Position) error
 	FindByPositionName(positionName string) (*Position, error)
+	GetPositionByID(id int) (*Position, error)
+	UpdatePosition(id int, newPositionData *Position) error
+	DeletePosition(id int) error
 	GetAll() (*[]Position, error)
 }

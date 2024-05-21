@@ -56,9 +56,12 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	userGroup.Delete("/delete/:id", jwt, userController.DeleteUser)
 
 	positionGroup := app.Group("/position")
-	positionGroup.Get("/", positionController.GetAll)
-	positionGroup.Get("/findbypositionname", positionController.GetByPositionName)
-	positionGroup.Post("/", positionController.CreatePosition)
+	positionGroup.Get("/all", jwt, positionController.GetAll)
+	positionGroup.Get("/findbypositionname", jwt, positionController.GetByPositionName)
+	positionGroup.Get("/:id", jwt, positionController.GetByPositionID)
+	positionGroup.Put("/:id", jwt, positionController.UpdatePosition)
+	positionGroup.Post("/", jwt, positionController.CreatePosition)
+	positionGroup.Delete("/:id", jwt, positionController.DeletePosition)
 
 	machineGroup := app.Group("/machine")
 	machineGroup.Get("/", machineController.GetAllMachine)
