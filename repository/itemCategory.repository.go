@@ -20,7 +20,11 @@ func (r *ItemCaterepository) CreateItemCategory(category *domain.ItemCategory) (
 	if err != nil {
 		return nil, err
 	}
-	return category, nil
+
+	response := new(domain.ItemCategory)
+	_ = r.db.Get(response, "SELECT * FROM `itemCategory` WHERE categoryID IN (SELECT LAST_INSERT_ID() as id)")
+
+	return response, nil
 }
 
 func (r *ItemCaterepository) GetAllItemCategory() (*[]domain.ItemCategory, error) {
@@ -48,7 +52,8 @@ func (r *ItemCaterepository) UpdateItemCategory(id int, category *domain.ItemCat
 	if err != nil {
 		return nil, err
 	}
-	return category, nil
+	response, _ := r.FindByID(id)
+	return response, nil
 }
 
 func (r *ItemCaterepository) DeleteItemCategory(id int) error {

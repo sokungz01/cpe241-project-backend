@@ -48,6 +48,7 @@ func (p *positionRepository) UpdatePosition(id int, newPositionData *domain.Posi
 	_, err := p.db.Exec("UPDATE `position`"+
 		"SET `positionName` = ?, `positionSalary` = ? WHERE `positionID` = ?",
 		newPositionData.PositionName, newPositionData.PositionSalary, id)
+
 	return err
 }
 

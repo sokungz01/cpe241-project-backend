@@ -1,8 +1,6 @@
 package repository
 
 import (
-	_"fmt"
-
 	"github.com/sokungz01/cpe241-project-backend/domain"
 	"github.com/sokungz01/cpe241-project-backend/platform"
 )
@@ -15,7 +13,6 @@ func NewmachineTypeRepository(db *platform.Mysql) domain.MachineTypeRepository {
 	return &machineTypeRepository{db: db}
 }
 
-
 func (m *machineTypeRepository) CreateMachineType(mtype domain.MachineType) error {
 	_, err := m.db.NamedExec("INSERT INTO `machineType` (`machineTypeName`)"+
 		"VALUE (:machineTypeName)", mtype)
@@ -25,12 +22,12 @@ func (m *machineTypeRepository) CreateMachineType(mtype domain.MachineType) erro
 	return nil
 }
 
-func (m *machineTypeRepository) GetAllMachineType() (*[]domain.MachineType,error) {
-	response := make([]domain.MachineType,0)
-	if err := m.db.Select(&response,"SELECT * FROM `machineType`");err != nil{
-		return nil,err
+func (m *machineTypeRepository) GetAllMachineType() (*[]domain.MachineType, error) {
+	response := make([]domain.MachineType, 0)
+	if err := m.db.Select(&response, "SELECT * FROM `machineType`"); err != nil {
+		return nil, err
 	}
-	return &response,nil
+	return &response, nil
 }
 
 func (m *machineTypeRepository) GetOneMachineTypeByName(typeName string) (*domain.MachineType, error) {
@@ -62,11 +59,12 @@ func (m *machineTypeRepository) UpDateMachineType(id int, newData domain.Machine
 	if err != nil {
 		return nil, err
 	}
-	//query updated data for response
-	err = m.db.Get(response, "SELECT * FROM `machineType` WHERE `machineTypeID` = ?", id)
+
+	response, err = m.GetOneMachineTypeByID(id)
 	if err != nil {
 		return nil, err
 	}
+
 	return response, nil
 }
 

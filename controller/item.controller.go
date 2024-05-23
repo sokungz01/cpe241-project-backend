@@ -29,6 +29,7 @@ func (c *itemController) CreateItem(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
 	}
 	response, err := c.usecase.CreateItem(newItem)
+
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
 	}

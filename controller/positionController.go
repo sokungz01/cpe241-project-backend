@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -28,12 +27,10 @@ func NewPositionController(posusecase domain.PositionRepository) positionControl
 func (usecase *positionUsecase) CreatePosition(c *fiber.Ctx) error {
 	newPosition := new(domain.Position)
 	if err := c.BodyParser(newPosition); err != nil {
-		fmt.Println(err)
 		return c.SendStatus(fiber.StatusInternalServerError)
 
 	}
 	if err := usecase.posusecase.Create(newPosition); err != nil {
-		fmt.Println(err)
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 	return c.SendStatus(fiber.StatusOK)
@@ -101,6 +98,5 @@ func (usecase *positionUsecase) GetAll(c *fiber.Ctx) error {
 	if err != nil {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
-	fmt.Println(response)
 	return c.Status(fiber.StatusOK).JSON(response)
 }
