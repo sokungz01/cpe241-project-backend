@@ -41,7 +41,7 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	itemController := controller.NewItemController(itemUsecase)
 
 	itemLogRepo := repository.NewItemLogRepository(myDB)
-	itemLogUsecase := usecase.NewItemLogUsecase(itemLogRepo)
+	itemLogUsecase := usecase.NewItemLogUsecase(itemLogRepo, itemRepo, userRepo)
 	itemLogController := controller.NewItemLogController(itemLogUsecase)
 
 	authGroup := app.Group("/auth")
@@ -95,5 +95,6 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 
 	itemLog := app.Group("/itemLog")
 	itemLog.Get("/", itemLogController.GetAll)
+	itemLog.Post("/", itemLogController.CreateItemLog)
 
 }

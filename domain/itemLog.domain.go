@@ -15,8 +15,10 @@ type ItemLog struct {
 
 type ItemLogUsecase interface {
 	GetAll() (*[]ItemLog, error)
+	CreateItemLog(itemLog *ItemLog) (*ItemLog, error)
 }
 
 type ItemLogRepository interface {
 	GetAll() (*[]ItemLog, error)
+	CreateItemLog(itemLog *ItemLog) (*ItemLog, error)
 }

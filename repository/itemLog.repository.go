@@ -23,3 +23,16 @@ func (r *ItemLog) GetAll() (*[]domain.ItemLog, error) {
 	}
 	return &response, nil
 }
+
+func (r *ItemLog) CreateItemLog(itemLog *domain.ItemLog) (*domain.ItemLog, error) {
+
+	_, err := r.db.NamedExec("INSERT INTO `itemLog` (`itemID`, `qty`, `staffID`,`isAdd`)"+
+		"VALUE (:itemID, :qty, :staffID, :isAdd)", itemLog)
+	if err != nil {
+		return nil, err
+	}
+
+	response := new(domain.ItemLog)
+	_ = r.db.Get(response, "SELECT * FROM `itemLog` AS il INNER JOIN `inventory` AS item ON item.itemID = il.itemID INNER JOIN `employee` ON employee.employeeID = il.staffID WHERE `itemLogID` IN (SELECT LAST_INSERT_ID() as id)")
+	return response, nil
+}
