@@ -44,10 +44,18 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	itemLogUsecase := usecase.NewItemLogUsecase(itemLogRepo, itemRepo, userRepo)
 	itemLogController := controller.NewItemLogController(itemLogUsecase)
 
+	errorLogRepo := repository.NewErrorLogRepository(myDB)
 	errorTypeRepo := repository.NewErrorTypeRepository(myDB)
 	errorTypeUsecase := usecase.NewErrorTypeUsecase(errorTypeRepo)
 	errorTypeController := controller.NewErrorTypeController(errorTypeUsecase)
 
+	serviceRequestRepo := repository.NewServiceRequestRepository(myDB)
+	serviceRequestUsecase := usecase.NewServiceRequestUsecase(serviceRequestRepo, userUseCase, machineUsecase, errorTypeUsecase, errorLogRepo)
+	serviceRequestController := controller.NewServiceRequestController(serviceRequestUsecase)
+
+	maintenanceStatusRepo := repository.NewmaintenanceStatusrepo(myDB)
+	maintenanceStatusUsecase := usecase.NewmaintenanceStatusUsecase(maintenanceStatusRepo)
+	maintenanceStatusController := controller.NewMaintenanceStatuscontroller(maintenanceStatusUsecase)
 	authGroup := app.Group("/auth")
 	authGroup.Get("/me", jwt, authController.Me)
 	authGroup.Post("/signup", userController.SignUp)
@@ -107,5 +115,12 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	errorType.Post("/", errorTypeController.CreateErrorType)
 	errorType.Put("/:id", errorTypeController.UpdateErrorType)
 	errorType.Delete("/:id", errorTypeController.DeleteErrorType)
+
+	serviceRequest := app.Group("/servicerequest")
+	serviceRequest.Get("/", serviceRequestController.GetAllServiceRequest)
+	serviceRequest.Post("/", serviceRequestController.CreateServiceRequest)
+
+	maintenanceStat := app.Group("/maintenancestatus")
+	maintenanceStat.Get("/",maintenanceStatusController.GetAll)
 
 }
