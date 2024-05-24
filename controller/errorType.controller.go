@@ -7,42 +7,43 @@ import (
 	"github.com/sokungz01/cpe241-project-backend/domain"
 )
 
-type ItemController interface {
-	CreateItem(ctx *fiber.Ctx) error
-	GetAllItem(ctx *fiber.Ctx) error
+type ErrorTypeController interface {
+	CreateErrorType(ctx *fiber.Ctx) error
+	GetAllErrorType(ctx *fiber.Ctx) error
 	FindByID(ctx *fiber.Ctx) error
-	UpdateItem(ctx *fiber.Ctx) error
-	DeleteItem(ctx *fiber.Ctx) error
+	UpdateErrorType(ctx *fiber.Ctx) error
+	DeleteErrorType(ctx *fiber.Ctx) error
 }
 
-type itemController struct {
-	usecase domain.ItemUseCase
+type errorTypeController struct {
+	usecase domain.ErrorTypeUseCase
 }
 
-func NewItemController(usecase domain.ItemUseCase) ItemController {
-	return &itemController{usecase: usecase}
+func NewErrorTypeController(usecase domain.ErrorTypeUseCase) ErrorTypeController {
+	return &errorTypeController{usecase: usecase}
 }
 
-func (c *itemController) CreateItem(ctx *fiber.Ctx) error {
-	newItem := new(domain.Item)
-	if err := ctx.BodyParser(newItem); err != nil {
+func (c *errorTypeController) CreateErrorType(ctx *fiber.Ctx) error {
+	newErrorType := new(domain.ErrorType)
+	if err := ctx.BodyParser(newErrorType); err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
 	}
-	response, err := c.usecase.CreateItem(newItem)
-
+	response, err := c.usecase.CreateErrorType(newErrorType)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
 	}
 	return ctx.Status(fiber.StatusOK).JSON(response)
 }
-func (c *itemController) GetAllItem(ctx *fiber.Ctx) error {
-	response, err := c.usecase.GetAllItem()
+
+func (c *errorTypeController) GetAllErrorType(ctx *fiber.Ctx) error {
+	response, err := c.usecase.GetAllErrorType()
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
 	}
 	return ctx.Status(fiber.StatusOK).JSON(response)
 }
-func (c *itemController) FindByID(ctx *fiber.Ctx) error {
+
+func (c *errorTypeController) FindByID(ctx *fiber.Ctx) error {
 	id, err := strconv.Atoi(ctx.Params("id"))
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
@@ -53,7 +54,8 @@ func (c *itemController) FindByID(ctx *fiber.Ctx) error {
 	}
 	return ctx.Status(fiber.StatusOK).JSON(response)
 }
-func (c *itemController) UpdateItem(ctx *fiber.Ctx) error {
+
+func (c *errorTypeController) UpdateErrorType(ctx *fiber.Ctx) error {
 	id, err := strconv.Atoi(ctx.Params("id"))
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
@@ -63,19 +65,20 @@ func (c *itemController) UpdateItem(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
 	}
 
-	newItem := new(domain.Item)
-	if err := ctx.BodyParser(newItem); err != nil {
+	newErrorType := new(domain.ErrorType)
+	if err := ctx.BodyParser(newErrorType); err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
 	}
 
-	response, err := c.usecase.UpdateItem(id, newItem)
+	response, err := c.usecase.UpdateErrorType(id, newErrorType)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(response)
 }
-func (c *itemController) DeleteItem(ctx *fiber.Ctx) error {
+
+func (c *errorTypeController) DeleteErrorType(ctx *fiber.Ctx) error {
 	id, err := strconv.Atoi(ctx.Params("id"))
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
@@ -85,10 +88,10 @@ func (c *itemController) DeleteItem(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
 	}
 
-	err = c.usecase.DeleteItem(id)
+	err = c.usecase.DeleteErrorType(id)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).SendString(err.Error())
 	}
 
-	return ctx.Status(fiber.StatusOK).SendString("Delete Item successfully")
+	return ctx.Status(fiber.StatusOK).SendString("Delete Item category successfully")
 }

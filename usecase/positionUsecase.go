@@ -1,9 +1,6 @@
 package usecase
 
 import (
-	//"errors"
-	//"fmt"
-
 	"github.com/sokungz01/cpe241-project-backend/domain"
 )
 

@@ -16,11 +16,12 @@ func NewItemRepository(db *platform.Mysql) domain.ItemRepository {
 func (r *itemRepository) CreateItem(item *domain.Item) (*domain.Item, error) {
 	_, err := r.db.NamedExec("INSERT INTO `inventory` (`itemCategoryID`, `itemName`, `itemCost`, `qty`)"+
 		"VALUE (:itemCategoryID, :itemName, :itemCost, :qty)", item)
-
 	if err != nil {
 		return nil, err
 	}
-	return item, nil
+	response := new(domain.Item)
+	_ = r.db.Get(response, "SELECT * FROM `inventory` WHERE itemID IN (SELECT LAST_INSERT_ID() as id)")
+	return response, nil
 }
 
 func (r *itemRepository) GetAllItem() (*[]domain.Item, error) {
@@ -48,7 +49,8 @@ func (r *itemRepository) UpdateItem(id int, item *domain.Item) (*domain.Item, er
 	if err != nil {
 		return nil, err
 	}
-	return item, nil
+	response, _ := r.FindByID(id)
+	return response, nil
 }
 
 func (r *itemRepository) DeleteItem(id int) error {

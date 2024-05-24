@@ -1,8 +1,6 @@
 package repository
 
 import (
-	_ "fmt"
-
 	"github.com/sokungz01/cpe241-project-backend/domain"
 	"github.com/sokungz01/cpe241-project-backend/platform"
 )
@@ -21,7 +19,11 @@ func (m *machineRepository) CreateMachine(newMachine *domain.Machine) (*domain.M
 	if err != nil {
 		return nil, err
 	}
-	return newMachine, nil
+
+	response := new(domain.Machine)
+	_ = m.db.Get(response, "SELECT * FROM `machine` WHERE categoryID IN (SELECT LAST_INSERT_ID() as id)")
+
+	return response, nil
 }
 
 func (m *machineRepository) GetAllMachine() (*[]domain.Machine, error) {
