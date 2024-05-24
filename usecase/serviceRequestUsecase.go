@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"fmt"
+
 	"github.com/sokungz01/cpe241-project-backend/domain"
 )
 
@@ -24,6 +26,10 @@ func NewServiceRequestUsecase(serviceRepository domain.ServiceRequestRepository,
 
 func (u *serviceRequestUsecase) GetAllServiceRequest() (*[]domain.ServiceRequest, error) {
 	response, err := u.serviceRepository.GetAllServiceRequest()
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println(&response)
 	return response, err
 }
 

@@ -16,7 +16,9 @@ func NewServiceRequestRepository(db *platform.Mysql) domain.ServiceRequestReposi
 func (r *serviceRequestRepository) GetAllServiceRequest() (*[]domain.ServiceRequest, error) {
 	response := make([]domain.ServiceRequest, 0)
 	err := r.db.Select(&response, "SELECT *"+
-		"FROM `serviceRequest`")
+		"FROM `serviceRequest`"+
+		"INNER JOIN employee ON employee.employeeID = serviceRequest.`employeeID`"+
+		"INNER JOIN machine ON machine.machineID = serviceRequest.`machineID`")
 	if err != nil {
 		return nil, err
 	}
