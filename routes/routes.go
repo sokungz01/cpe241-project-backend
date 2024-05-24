@@ -72,7 +72,7 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	machineGroup.Delete("/:id", machineController.DeleteMachine)
 
 	machineTypeGroup := app.Group("/machinetype")
-	machineTypeGroup.Get("/", machineTypeController.GetAllMachineType)
+	machineTypeGroup.Get("/", jwt, machineTypeController.GetAllMachineType)
 	machineTypeGroup.Get("/:id", machineTypeController.GetOneMachineTypeByID)
 	machineTypeGroup.Get("/getbyname", machineTypeController.GetOneMachineTypeByName)
 	machineTypeGroup.Post("/", machineTypeController.CreateMachineType)
