@@ -20,3 +20,10 @@ func (elog *errorLogRepository) Create(newError domain.ErrorLog) error {
 		"VALUE (:errorTypeID,:serviceID,:errorDescription,:createdDate,:updateDate)", newError)
 	return insertErr
 }
+func (r *errorLogRepository) FindByServiceID(id int) (*[]domain.ErrorLog, error) {
+	response := make([]domain.ErrorLog, 0)
+	if err := r.db.Select(&response, "SELECT * FROM `errorLog` WHERE `serviceID` = ?", id); err != nil {
+		return nil, err
+	}
+	return &response, nil
+}

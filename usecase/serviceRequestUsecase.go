@@ -1,8 +1,6 @@
 package usecase
 
 import (
-	"fmt"
-
 	"github.com/sokungz01/cpe241-project-backend/domain"
 )
 
@@ -29,7 +27,14 @@ func (u *serviceRequestUsecase) GetAllServiceRequest() (*[]domain.ServiceRequest
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(&response)
+	for index, item := range *response {
+		errorLog, err := u.errorlog.FindByServiceID(item.ServiceID)
+		if err != nil {
+			return nil, err
+		}
+		(*response)[index].ErrorLog = make([]domain.ErrorLog, 0)
+		(*response)[index].ErrorLog = *errorLog
+	}
 	return response, err
 }
 
