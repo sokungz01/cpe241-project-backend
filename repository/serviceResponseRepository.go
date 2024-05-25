@@ -25,10 +25,12 @@ func (r *serviceResponseRepository) GetAllResponse() (*[]domain.ServiceResponse,
 	return response, nil
 }
 
-func (r *serviceResponseRepository) CreateServiceResponse(newResponse *domain.ServiceResponse) error {
+func (r *serviceResponseRepository) CreateServiceResponse(newResponse *domain.ServiceResponse) (*domain.ServiceResponse, error) {
 	_, err := r.db.Exec("INSERT INTO `serviceResponse` (`staffID`,`requestedServiceID`,`title`,`description`,`createdDate`,`updateDate`)"+
 		"VALUES (?,?,?,?,?,?)", newResponse.StaffID, newResponse.RequestedServiceID, newResponse.Title, newResponse.Description, newResponse.CreatedDate, newResponse.UpdateDate)
-	return err
+	response := new(domain.ServiceResponse)
+	r.db.Get(response, "SELECT * FROM `serviceResponse` WHERE `staffServiceID` IN (SELECT LAST_INSERT_ID() as id)")
+	return response, err
 }
 
 func (r *serviceResponseRepository) DeleteResponse(id int) error {

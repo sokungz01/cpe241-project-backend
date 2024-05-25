@@ -14,6 +14,7 @@ type ServiceResponse struct {
 	Description        string         `json:"description" db:"desc"`
 	CreatedDate        time.Time      `json:"createdDate" db:"createdDate"`
 	UpdateDate         time.Time      `json:"updateDate" db:"updateDate"`
+	MaintenanceParts   []Item         `json:"maintenanceParts"`
 }
 
 type ServiceResponseRepository interface {
@@ -21,7 +22,7 @@ type ServiceResponseRepository interface {
 	GetResponse(id int) (*ServiceResponse, error)
 	GetResponseByService(id int) (*[]ServiceResponse, error)
 	DeleteResponse(id int) error
-	CreateServiceResponse(newResponse *ServiceResponse) error
+	CreateServiceResponse(newResponse *ServiceResponse) (*ServiceResponse, error)
 }
 
 type ServiceResponseUsecase interface {
@@ -29,5 +30,5 @@ type ServiceResponseUsecase interface {
 	GetResponse(id int) (*ServiceResponse, error)
 	GetResponseByService(id int) (*[]ServiceResponse, error)
 	DeleteResponse(id int) error
-	CreateServiceResponse(newResponse *ServiceResponse) error
+	CreateServiceResponse(newResponse *ServiceResponse) (*ServiceResponse, error)
 }

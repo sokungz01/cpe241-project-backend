@@ -41,7 +41,11 @@ func (u *itemLogUsecase) CreateItemLog(itemLog *domain.ItemLog) (*domain.ItemLog
 	if item.ItemQty+itemLog.ItemQty < 0 {
 		return nil, errors.New("resulting item quantity cannot be negative")
 	}
-	item.ItemQty += itemLog.ItemQty
+	if itemLog.IsAdd {
+		item.ItemQty += itemLog.ItemQty
+	} else {
+		item.ItemQty -= itemLog.ItemQty
+	}
 	_, err = u.itemRepository.UpdateItem(itemLog.ItemID, item)
 	if err != nil {
 		return nil, err
