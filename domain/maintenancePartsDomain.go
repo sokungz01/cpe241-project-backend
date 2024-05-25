@@ -5,7 +5,7 @@ import (
 )
 
 type MaintenanceParts struct {
-	MaintenancePartID int       `json:"maintenancePart" db:"maintenancePart"`
+	MaintenancePartID int       `json:"maintenancePart" db:"maintenancePartID"`
 	ServiceID         int       `json:"serviceID" db:"serviceID"`
 	ItemID            int       `json:"itemID" db:"itemID"`
 	Qty               int       `json:"qty" db:"qty"`
@@ -14,4 +14,5 @@ type MaintenanceParts struct {
 
 type MaintenancePartsRepository interface {
 	CreateMaintenanceParts(serviceID int, itemID int, qty int, createdDate time.Time) error
+	GetMaintenacnePartsByServiceID(serviceID int) (*[]MaintenanceParts, error)
 }

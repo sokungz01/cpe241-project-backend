@@ -22,13 +22,18 @@ func (u *itemUsecase) CreateItem(item *domain.Item) (*domain.Item, error) {
 	}
 	dummy := new(domain.Item)
 	adding := new(domain.ItemLog)
+
+	dummy.ItemCategoryID = item.ItemCategoryID
+	dummy.ItemName = item.ItemName
+	dummy.ItemCost = item.ItemCost
 	dummy.ItemQty = 0
+	dummy.StaffID = item.StaffID
 
 	response, err := u.itemRepository.CreateItem(dummy)
 	if err != nil {
 		return nil, errors.New("erorr! cannot create new item ")
 	}
-	adding.ItemID = item.ItemID
+	adding.ItemID = response.ItemID
 	adding.ItemQty = item.ItemQty
 	adding.StaffID = item.StaffID
 	adding.IsAdd = true
@@ -36,6 +41,7 @@ func (u *itemUsecase) CreateItem(item *domain.Item) (*domain.Item, error) {
 	if logerr != nil {
 		return nil, errors.New("erorr! cannot create new item due to logging error ")
 	}
+	response.ItemQty = item.ItemQty
 	return response, nil
 }
 

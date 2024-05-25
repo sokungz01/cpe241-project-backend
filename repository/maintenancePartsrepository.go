@@ -20,3 +20,11 @@ func (r *maintenancePartRepository) CreateMaintenanceParts(serviceID int, itemID
 		" VALUE (?,?,?,?)", serviceID, itemID, qty, createdDate)
 	return err
 }
+
+func (r *maintenancePartRepository) GetMaintenacnePartsByServiceID(serviceID int) (*[]domain.MaintenanceParts, error) {
+	response := make([]domain.MaintenanceParts, 0)
+	if err := r.db.Select(&response, "SELECT * FROM `maintenanceParts` WHERE serviceID = ?", serviceID); err != nil {
+		return nil, err
+	}
+	return &response, nil
+}

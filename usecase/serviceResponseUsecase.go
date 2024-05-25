@@ -50,7 +50,7 @@ func (u *serviceResponseUsecase) CreateServiceResponse(newResponse *domain.Servi
 
 	for _, v := range newResponse.MaintenanceParts {
 		item, err := u.item.FindByID(v.ItemID)
-		if err != nil || item.ItemQty-v.ItemQty < 0 {
+		if err != nil || item.ItemQty-v.Qty < 0 {
 			return nil, errors.New("item : not valid or out of stock")
 		}
 	}
@@ -61,14 +61,14 @@ func (u *serviceResponseUsecase) CreateServiceResponse(newResponse *domain.Servi
 	}
 
 	for _, v := range newResponse.MaintenanceParts {
-		err := u.MParts.CreateMaintenanceParts(response.StaffServiceID, v.ItemID, v.ItemQty, newResponse.CreatedDate)
+		err := u.MParts.CreateMaintenanceParts(response.StaffServiceID, v.ItemID, v.Qty, newResponse.CreatedDate)
 		if err != nil {
 			return nil, err
 		}
 
 		newLog := new(domain.ItemLog)
 		newLog.ItemID = v.ItemID
-		newLog.ItemQty = v.ItemQty
+		newLog.ItemQty = v.Qty
 		newLog.StaffID = newResponse.StaffID
 		newLog.IsAdd = false
 		newLog.CreateDate = newResponse.CreatedDate
@@ -95,5 +95,13 @@ func (u *serviceResponseUsecase) GetResponseByService(id int) (*[]domain.Service
 	if err != nil {
 		return nil, errors.New("serviceResponse: serviceID error")
 	}
+	for index := range *response {
+		mParts, err := u.MParts.GetMaintenacnePartsByServiceID((*response)[index].StaffServiceID)
+		if err != nil {
+			mParts = &[]domain.MaintenanceParts{}
+		}
+		(*response)[index].MaintenanceParts = *mParts
+	}
+
 	return response, err
 }
