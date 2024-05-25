@@ -24,7 +24,7 @@ func main() {
 
 	api := fiber.New()
 	api.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://localhost:5173,https://machine.cpe241.sokungz.work",
+		AllowOrigins:     "http://localhost:5173,https://machine.cpe241.sokungz.work,http://localhost:4173",
 		AllowCredentials: true,
 	}))
 	routes.RoutesRegister(api, myDB, cfg)
