@@ -5,20 +5,39 @@ import (
 	"github.com/sokungz01/cpe241-project-backend/platform"
 )
 
-type serviceResponseReponseitory struct {
+type serviceResponseRepository struct {
 	db *platform.Mysql
 }
 
 func NewServiceResponseRepository(db *platform.Mysql) domain.ServiceResponseRepository {
-	return &serviceResponseReponseitory{db: db}
+	return &serviceResponseRepository{db: db}
 }
 
-func (r *serviceResponseReponseitory) GetAllResponse() (*[]domain.ServiceResponse, error) {
+func (r *serviceResponseRepository) GetAllResponse() (*[]domain.ServiceResponse, error) {
 	response := new([]domain.ServiceResponse)
 	err := r.db.Select(response, "SELECT *,`serviceResponse`.`description` AS `desc`"+
 		"FROM `serviceResponse`"+
 		"INNER JOIN employee ON employee.employeeID = `serviceResponse`.`staffID`"+
 		"INNER JOIN serviceRequest ON serviceRequest.serviceID = serviceResponse.requestedServiceID")
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+func (r *serviceResponseRepository) CreateServiceResponse(newResponse *domain.ServiceResponse) error {
+	_, err := r.db.Exec("INSERT INTO `serviceResponse` (`staffID`,`requestedServiceID`,`title`,`description`,`createdDate`,`updateDate`)"+
+		"VALUES (?,?,?,?,?,?)", newResponse.StaffID, newResponse.RequestedServiceID, newResponse.Title, newResponse.Description, newResponse.CreatedDate, newResponse.UpdateDate)
+	return err
+}
+
+func (r *serviceResponseRepository) GetResponse(id int) (*domain.ServiceResponse, error) {
+	response := new(domain.ServiceResponse)
+	err := r.db.Get(response, "SELECT *,`serviceResponse`.`description` AS `desc`"+
+		"FROM `serviceResponse`"+
+		"INNER JOIN employee ON employee.employeeID = `serviceResponse`.`staffID`"+
+		"INNER JOIN serviceRequest ON serviceRequest.serviceID = serviceResponse.requestedServiceID"+
+		" WHERE `serviceResponse`.`staffServiceID` = ?", id)
 	if err != nil {
 		return nil, err
 	}

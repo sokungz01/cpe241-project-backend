@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"database/sql"
 	"time"
 )
 
@@ -14,13 +13,17 @@ type ServiceResponse struct {
 	Title              string         `json:"title" db:"title"`
 	Description        string         `json:"description" db:"desc"`
 	CreatedDate        time.Time      `json:"createdDate" db:"createdDate"`
-	UpdateDate         sql.NullTime   `json:"updateDate" db:"updateDate"`
+	UpdateDate         time.Time      `json:"updateDate" db:"updateDate"`
 }
 
 type ServiceResponseRepository interface {
 	GetAllResponse() (*[]ServiceResponse, error)
+	GetResponse(id int) (*ServiceResponse, error)
+	CreateServiceResponse(newResponse *ServiceResponse) error
 }
 
 type ServiceResponseUsecase interface {
 	GetAllResponse() (*[]ServiceResponse, error)
+	GetResponse(id int) (*ServiceResponse, error)
+	CreateServiceResponse(newResponse *ServiceResponse) error
 }
