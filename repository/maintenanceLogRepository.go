@@ -69,3 +69,11 @@ func (r *maintenanceLogrepository) CreatemaintenanceLog(newLog *domain.Maintenan
 	}
 	return response, nil
 }
+
+func (r *maintenanceLogrepository) UpdateMaintenanceLogStatus(maintenanceID int, status int) error {
+
+	_, err := r.db.Exec("UPDATE `maintenanceLog` "+
+		"SET `statusID` = ? "+
+		"WHERE `maintenanceID` = ?", status, maintenanceID)
+	return err
+}

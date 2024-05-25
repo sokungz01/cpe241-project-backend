@@ -34,7 +34,7 @@ func (u *maintenanceLogUsecase) GetAllmaintenanceLog() (*[]domain.MaintenanceLog
 
 func (u *maintenanceLogUsecase) GetMaintenanceLogByMachineID(machineID int) (*[]domain.MaintenanceLog, error) {
 	response, err := u.repo.GetMaintenanceLogByMachineID(machineID)
-	if err != nil { 
+	if err != nil {
 		return nil, err
 	}
 	for i := 0; i < len(*response); i++ {
@@ -70,4 +70,11 @@ func (u *maintenanceLogUsecase) CreatemaintenanceLog(newLog *domain.MaintenanceL
 	}
 	response.Staff.Password = ""
 	return response, nil
+}
+
+func (u *maintenanceLogUsecase) UpdateMaintenanceLogStatus(maintenanceID int, status int) error {
+	if status != 3 && status != 1 {
+		return errors.New("value out of range")
+	}
+	return u.repo.UpdateMaintenanceLogStatus(maintenanceID, status)
 }

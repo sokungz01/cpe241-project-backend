@@ -12,6 +12,7 @@ type MaintenanceLogController interface {
 	GetMaintenanceLogByMachineID(c *fiber.Ctx) error
 	GetMaintenanceLogByStaffID(c *fiber.Ctx) error
 	CreatemaintenanceLog(c *fiber.Ctx) error
+	UpdateMaintenanceLogStatus(c *fiber.Ctx) error
 }
 
 type maintenanceLogcontroller struct {
@@ -65,5 +66,21 @@ func (u *maintenanceLogcontroller) CreatemaintenanceLog(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString(createErr.Error())
 	}
 	return c.Status(fiber.StatusOK).JSON(response)
+}
 
+func (u *maintenanceLogcontroller) UpdateMaintenanceLogStatus(c *fiber.Ctx) error {
+	input := new(domain.MaintenanceLog)
+	id, convserr := strconv.Atoi(c.Params("id"))
+	if convserr != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(convserr.Error())
+	}
+	parseerr := c.BodyParser(input)
+	if parseerr != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(parseerr.Error())
+	}
+	updateErr := u.usecase.UpdateMaintenanceLogStatus(id, input.StatusID)
+	if updateErr != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(updateErr.Error())
+	}
+	return c.SendStatus(fiber.StatusOK)
 }

@@ -21,6 +21,7 @@ type MaintenanceLogRepository interface {
 	GetMaintenanceLogByMachineID(machineID int) (*[]MaintenanceLog, error)
 	GetMaintenanceLogByStaffID(staffID int) (*[]MaintenanceLog, error)
 	CreatemaintenanceLog(newLog *MaintenanceLog) (*MaintenanceLog, error)
+	UpdateMaintenanceLogStatus(maintenanceID int, status int) error
 }
 
 type MaintenanceLogUsecase interface {
@@ -28,4 +29,5 @@ type MaintenanceLogUsecase interface {
 	GetMaintenanceLogByMachineID(machineID int) (*[]MaintenanceLog, error)
 	GetMaintenanceLogByStaffID(staffID int) (*[]MaintenanceLog, error)
 	CreatemaintenanceLog(newLog *MaintenanceLog) (*MaintenanceLog, error)
+	UpdateMaintenanceLogStatus(maintenanceID int, status int) error
 }
