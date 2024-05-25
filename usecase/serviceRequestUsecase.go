@@ -42,7 +42,7 @@ func (u *serviceRequestUsecase) GetAllServiceRequest() (*[]domain.ServiceRequest
 
 func (u *serviceRequestUsecase) GetServiceRequest(id int) (*domain.ServiceRequest, error) {
 	if id == 0 {
-		return nil, errors.New("Error! serviceID cannot be not a number ")
+		return nil, errors.New("error! serviceID cannot be not a number ")
 	}
 	response, err := u.serviceRepository.GetServiceRequest(id)
 	if err != nil {

@@ -49,3 +49,16 @@ func (r *serviceResponseRepository) GetResponse(id int) (*domain.ServiceResponse
 	}
 	return response, nil
 }
+
+func (r *serviceResponseRepository) GetResponseByService(id int) (*[]domain.ServiceResponse, error) {
+	response := make([]domain.ServiceResponse, 0)
+	err := r.db.Select(&response, "SELECT *,`serviceResponse`.`description` AS `desc`"+
+		"FROM `serviceResponse`"+
+		"INNER JOIN employee ON employee.employeeID = `serviceResponse`.`staffID`"+
+		"INNER JOIN serviceRequest ON serviceRequest.serviceID = serviceResponse.requestedServiceID"+
+		" WHERE `serviceResponse`.`requestedServiceID` = ?", id)
+	if err != nil {
+		return nil, err
+	}
+	return &response, nil
+}

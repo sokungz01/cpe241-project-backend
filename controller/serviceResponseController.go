@@ -10,6 +10,7 @@ import (
 type ServiceResponseController interface {
 	GetAll(c *fiber.Ctx) error
 	GetOne(c *fiber.Ctx) error
+	GetOneByService(c *fiber.Ctx) error
 	DeleteResponse(c *fiber.Ctx) error
 	CreateResponse(c *fiber.Ctx) error
 }
@@ -36,6 +37,18 @@ func (u *serviceResponseController) GetOne(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString(convErr.Error())
 	}
 	response, getErr := u.usecase.GetResponse(id)
+	if getErr != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(getErr.Error())
+	}
+	return c.Status(fiber.StatusOK).JSON(response)
+}
+
+func (u *serviceResponseController) GetOneByService(c *fiber.Ctx) error {
+	id, convErr := strconv.Atoi(c.Params("id"))
+	if convErr != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(convErr.Error())
+	}
+	response, getErr := u.usecase.GetResponseByService(id)
 	if getErr != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString(getErr.Error())
 	}

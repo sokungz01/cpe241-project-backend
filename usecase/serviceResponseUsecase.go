@@ -45,5 +45,16 @@ func (u *serviceResponseUsecase) DeleteResponse(id int) error {
 
 func (u *serviceResponseUsecase) GetResponse(id int) (*domain.ServiceResponse, error) {
 	response, err := u.responseRepo.GetResponse(id)
+	if err != nil {
+		return nil, errors.New("serviceResponse: responseID error")
+	}
+	return response, err
+}
+
+func (u *serviceResponseUsecase) GetResponseByService(id int) (*[]domain.ServiceResponse, error) {
+	response, err := u.responseRepo.GetResponseByService(id)
+	if err != nil {
+		return nil, errors.New("serviceResponse: serviceID error")
+	}
 	return response, err
 }
