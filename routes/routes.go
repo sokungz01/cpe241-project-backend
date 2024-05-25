@@ -49,17 +49,20 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	errorTypeUsecase := usecase.NewErrorTypeUsecase(errorTypeRepo)
 	errorTypeController := controller.NewErrorTypeController(errorTypeUsecase)
 
+	maintenancePartsRepo := repository.NewMaintenancePartsRepository(myDB)
+
 	serviceRequestRepo := repository.NewServiceRequestRepository(myDB)
 	serviceRequestUsecase := usecase.NewServiceRequestUsecase(serviceRequestRepo, userUseCase, machineUsecase, errorTypeUsecase, errorLogRepo)
 	serviceRequestController := controller.NewServiceRequestController(serviceRequestUsecase)
 
 	serviceResponseRepo := repository.NewServiceResponseRepository(myDB)
-	serviceResponseUsecase := usecase.NewServiceResponsUsecase(serviceResponseRepo, userUseCase, serviceRequestUsecase)
+	serviceResponseUsecase := usecase.NewServiceResponsUsecase(serviceResponseRepo, userUseCase, serviceRequestUsecase, itemUsecase, itemRepo, maintenancePartsRepo, itemLogUsecase)
 	serviceResponseController := controller.NewServiceResponseController(serviceResponseUsecase)
 
 	maintenanceStatusRepo := repository.NewmaintenanceStatusrepo(myDB)
 	maintenanceStatusUsecase := usecase.NewmaintenanceStatusUsecase(maintenanceStatusRepo)
 	maintenanceStatusController := controller.NewMaintenanceStatuscontroller(maintenanceStatusUsecase)
+
 	authGroup := app.Group("/auth")
 	authGroup.Get("/me", jwt, authController.Me)
 	authGroup.Post("/signup", userController.SignUp)
@@ -83,6 +86,7 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	machineGroup.Get("/", machineController.GetAllMachine)
 	machineGroup.Get("/getbyname", machineController.GetMachineByName)
 	machineGroup.Get("/:id", machineController.GetMachineByID)
+	machineGroup.Put("/updatestatus/:id", machineController.UpdateMachineStatus)
 	machineGroup.Put("/:id", machineController.UpdateMachineData)
 	machineGroup.Post("/", machineController.CreateMachine)
 	machineGroup.Delete("/:id", machineController.DeleteMachine)

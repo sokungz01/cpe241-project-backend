@@ -73,9 +73,9 @@ func (u *serviceResponseController) CreateResponse(c *fiber.Ctx) error {
 	if parseErr != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString(parseErr.Error())
 	}
-	createErr := u.usecase.CreateServiceResponse(input)
+	response, createErr := u.usecase.CreateServiceResponse(input)
 	if createErr != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString(createErr.Error())
 	}
-	return c.SendStatus(fiber.StatusOK)
+	return c.Status(fiber.StatusOK).JSON(response)
 }

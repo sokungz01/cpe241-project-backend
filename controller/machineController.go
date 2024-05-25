@@ -13,6 +13,7 @@ type MachineController interface {
 	GetMachineByID(c *fiber.Ctx) error
 	GetMachineByName(c *fiber.Ctx) error
 	UpdateMachineData(c *fiber.Ctx) error
+	UpdateMachineStatus(c *fiber.Ctx) error
 	DeleteMachine(c *fiber.Ctx) error
 }
 
@@ -88,6 +89,24 @@ func (m *machineController) UpdateMachineData(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString(updateError.Error())
 	}
 	return c.Status(fiber.StatusOK).JSON(response)
+}
+
+func (m *machineController) UpdateMachineStatus(c *fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
+	newMachineData := new(domain.Machine)
+
+	if parseErr := c.BodyParser(newMachineData); parseErr != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(parseErr.Error())
+	}
+
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
+	}
+	updateError := m.usecase.UpdateMachineStatus(id, newMachineData.Status)
+	if updateError != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(updateError.Error())
+	}
+	return c.SendStatus(fiber.StatusOK)
 }
 
 func (m *machineController) DeleteMachine(c *fiber.Ctx) error {

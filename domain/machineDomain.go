@@ -23,6 +23,7 @@ type MachineRepository interface {
 	GetMachineByName(machineName string) (*[]Machine, error)
 	UpdateMachineData(id int, newMachineData *Machine) error
 	DeleteMachine(id int) error
+	UpdateMachineStatus(id int, status int) error
 }
 
 type MachineUsecase interface {
@@ -32,4 +33,5 @@ type MachineUsecase interface {
 	GetMachineByName(machineName string) (*[]Machine, error)
 	UpdateMachineData(id int, newMachineData *Machine) (*Machine, error)
 	DeleteMachine(id int) error
+	UpdateMachineStatus(id int, status int) error
 }
