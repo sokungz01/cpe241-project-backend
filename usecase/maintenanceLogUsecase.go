@@ -34,7 +34,7 @@ func (u *maintenanceLogUsecase) GetAllmaintenanceLog() (*[]domain.MaintenanceLog
 
 func (u *maintenanceLogUsecase) GetMaintenanceLogByMachineID(machineID int) (*[]domain.MaintenanceLog, error) {
 	response, err := u.repo.GetMaintenanceLogByMachineID(machineID)
-	if err != nil {
+	if err != nil { 
 		return nil, err
 	}
 	for i := 0; i < len(*response); i++ {
@@ -46,6 +46,7 @@ func (u *maintenanceLogUsecase) GetMaintenanceLogByMachineID(machineID int) (*[]
 func (u *maintenanceLogUsecase) GetMaintenanceLogByStaffID(staffID int) (*[]domain.MaintenanceLog, error) {
 	response, err := u.repo.GetMaintenanceLogByStaffID(staffID)
 	for i := 0; i < len(*response); i++ {
+
 		(*response)[i].Staff.Password = ""
 	}
 	if err != nil {

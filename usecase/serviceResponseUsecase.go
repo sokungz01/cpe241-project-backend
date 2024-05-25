@@ -100,6 +100,15 @@ func (u *serviceResponseUsecase) GetResponseByService(id int) (*[]domain.Service
 		if err != nil {
 			mParts = &[]domain.MaintenanceParts{}
 		}
+
+		for i := range *mParts {
+			itemData, err := u.item.FindByID((*mParts)[i].ItemID)
+			if err != nil {
+				return nil, errors.New("serviceResponse: get ItemID")
+			}
+			(*mParts)[i].Item = *itemData
+
+		}
 		(*response)[index].MaintenanceParts = *mParts
 	}
 
