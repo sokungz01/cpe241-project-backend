@@ -49,6 +49,11 @@ func (srq *serviceRequestController) CreateServiceRequest(c *fiber.Ctx) error {
 	if parseErr != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString(parseErr.Error())
 	}
-	srq.serviceRequestUsecase.CreateServiceRequest(input)
-	return c.SendStatus(fiber.StatusOK)
+	response, err := srq.serviceRequestUsecase.CreateServiceRequest(input)
+
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
+	}
+
+	return c.Status(fiber.StatusOK).JSON(response)
 }

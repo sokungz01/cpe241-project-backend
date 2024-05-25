@@ -15,10 +15,16 @@ func NewErrorLogRepository(db *platform.Mysql) domain.ErrorlogRepository {
 	}
 }
 
-func (elog *errorLogRepository) Create(newError domain.ErrorLog) error {
-	_, insertErr := elog.db.Exec("INSERT INTO `errorLog` (`errorTypeID`,`serviceID`,`errorDescription`,`createdDate`,`updateDate`)"+
-		"VALUE (:errorTypeID,:serviceID,:errorDescription,:createdDate,:updateDate)", newError)
-	return insertErr
+func (elog *errorLogRepository) Create(newError *domain.ErrorLog) (*domain.ErrorLog, error) {
+	_, insertErr := elog.db.Exec("INSERT INTO `errorLog` (`errorTypeID`,`serviceID`,`errorDescription`) "+
+		"VALUES (?, ?, ?)",
+		newError.ErrorTypeID, newError.ServiceID, newError.ErrorDescription)
+	if insertErr != nil {
+		return nil, insertErr
+	}
+	response := new(domain.ErrorLog)
+	_ = elog.db.Get(response, "SELECT * FROM `errorLog` WHERE `errorID` IN (SELECT LAST_INSERT_ID() as id)")
+	return response, nil
 }
 func (r *errorLogRepository) FindByServiceID(id int) (*[]domain.ErrorLog, error) {
 	response := make([]domain.ErrorLog, 0)

@@ -15,6 +15,6 @@ type ErrorLog struct {
 }
 
 type ErrorlogRepository interface {
-	Create(newError ErrorLog) error
+	Create(newError *ErrorLog) (*ErrorLog, error)
 	FindByServiceID(id int) (*[]ErrorLog, error)
 }

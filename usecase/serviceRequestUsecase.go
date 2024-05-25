@@ -57,9 +57,29 @@ func (u *serviceRequestUsecase) GetServiceRequest(id int) (*domain.ServiceReques
 	return response, err
 }
 
-func (u *serviceRequestUsecase) CreateServiceRequest(newServiceRequest *domain.ServiceRequest) error {
-	for _, v := range newServiceRequest.ErrorLog {
-		u.errorlog.Create(v)
+func (u *serviceRequestUsecase) CreateServiceRequest(newServiceRequest *domain.ServiceRequest) (*domain.ServiceRequest, error) {
+	if newServiceRequest == nil || newServiceRequest.EmployeeID == 0 || newServiceRequest.MachineID == 0 || newServiceRequest.Description == "" {
+		return nil, errors.New("error! service request data not provide")
 	}
-	return nil
+
+	response, err := u.serviceRepository.CreateServiceRequest(newServiceRequest)
+
+	if err != nil {
+		return nil, errors.New("error! service request cannot create")
+	}
+
+	serviceID := response.ServiceID
+	errorLogArr := make([]domain.ErrorLog, 0)
+	for _, v := range newServiceRequest.ErrorLog {
+		v.ServiceID = serviceID
+		response, err := u.errorlog.Create(&v)
+		if err != nil {
+			return nil, errors.New("error! errorlog cannot create")
+		}
+		errorLogArr = append(errorLogArr, *response)
+	}
+
+	response.ErrorLog = make([]domain.ErrorLog, 0)
+	response.ErrorLog = errorLogArr
+	return nil, nil
 }

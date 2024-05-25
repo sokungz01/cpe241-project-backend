@@ -13,6 +13,19 @@ func NewServiceRequestRepository(db *platform.Mysql) domain.ServiceRequestReposi
 	return &serviceRequestRepository{db: db}
 }
 
+func (r *serviceRequestRepository) CreateServiceRequest(newServiceRequest *domain.ServiceRequest) (*domain.ServiceRequest, error) {
+	_, err := r.db.NamedExec("INSERT INTO `serviceRequest`(`employeeID`, `machineID`, `description`, `createdDate`, `updateDate`, `statusID`) "+
+		"VALUES (:employeeID, :machineID, :description, :createdDate, :createdDate, 1)", newServiceRequest)
+	if err != nil {
+		return nil, err
+	}
+
+	response := new(domain.ServiceRequest)
+	_ = r.db.Get(response, "SELECT * FROM `serviceRequest` WHERE serviceID IN (SELECT LAST_INSERT_ID() as id)")
+
+	return response, nil
+}
+
 func (r *serviceRequestRepository) GetAllServiceRequest() (*[]domain.ServiceRequest, error) {
 	response := make([]domain.ServiceRequest, 0)
 	err := r.db.Select(&response, "SELECT *"+

@@ -19,6 +19,7 @@ type ServiceRequest struct {
 }
 
 type ServiceRequestRepository interface {
+	CreateServiceRequest(newServiceRequest *ServiceRequest) (*ServiceRequest, error)
 	GetAllServiceRequest() (*[]ServiceRequest, error)
 	GetServiceRequest(id int) (*ServiceRequest, error)
 }
@@ -26,5 +27,5 @@ type ServiceRequestRepository interface {
 type ServiceRequestUsecase interface {
 	GetAllServiceRequest() (*[]ServiceRequest, error)
 	GetServiceRequest(id int) (*ServiceRequest, error)
-	CreateServiceRequest(newServiceRequest *ServiceRequest) error
+	CreateServiceRequest(newServiceRequest *ServiceRequest) (*ServiceRequest, error)
 }
