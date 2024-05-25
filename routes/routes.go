@@ -56,12 +56,16 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	serviceRequestController := controller.NewServiceRequestController(serviceRequestUsecase)
 
 	serviceResponseRepo := repository.NewServiceResponseRepository(myDB)
-	serviceResponseUsecase := usecase.NewServiceResponsUsecase(serviceResponseRepo, userUseCase, serviceRequestUsecase, itemUsecase, itemRepo, maintenancePartsRepo, itemLogUsecase)
+	serviceResponseUsecase := usecase.NewServiceResponsUsecase(serviceResponseRepo, userUseCase, serviceRequestUsecase, itemUsecase, itemRepo, maintenancePartsRepo, itemLogUsecase, machineUsecase)
 	serviceResponseController := controller.NewServiceResponseController(serviceResponseUsecase)
 
 	maintenanceStatusRepo := repository.NewmaintenanceStatusrepo(myDB)
 	maintenanceStatusUsecase := usecase.NewmaintenanceStatusUsecase(maintenanceStatusRepo)
 	maintenanceStatusController := controller.NewMaintenanceStatuscontroller(maintenanceStatusUsecase)
+
+	maintenanceLogRepo := repository.NewMaintenanceLogRepository(myDB)
+	maintenanceLogUsecase := usecase.NewMaintenanceLogUsecase(maintenanceLogRepo, userUseCase, machineUsecase)
+	maintenanceLogController := controller.NewMaintenanceLogController(maintenanceLogUsecase)
 
 	authGroup := app.Group("/auth")
 	authGroup.Get("/me", jwt, authController.Me)
@@ -139,5 +143,8 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 
 	maintenanceStat := app.Group("/maintenancestatus")
 	maintenanceStat.Get("/", maintenanceStatusController.GetAll)
+
+	maintenanceLog := app.Group("/maintenancelog")
+	maintenanceLog.Get("/", maintenanceLogController.GetAllmaintenanceLog)
 
 }
