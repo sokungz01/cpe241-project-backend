@@ -49,3 +49,13 @@ func (r *serviceRequestRepository) GetServiceRequest(id int) (*domain.ServiceReq
 	}
 	return response, nil
 }
+
+func (r *serviceRequestRepository) UpdateServiceRequestStatus(id int, statusID int) (*domain.ServiceRequest, error) {
+	_, err := r.db.Exec("UPDATE `serviceRequest`"+
+		"SET `statusID`= ? WHERE `serviceID`= ? ", statusID, id)
+	if err != nil {
+		return nil, err
+	}
+	response, _ := r.GetServiceRequest(id)
+	return response, nil
+}

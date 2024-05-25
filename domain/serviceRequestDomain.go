@@ -22,10 +22,12 @@ type ServiceRequestRepository interface {
 	CreateServiceRequest(newServiceRequest *ServiceRequest) (*ServiceRequest, error)
 	GetAllServiceRequest() (*[]ServiceRequest, error)
 	GetServiceRequest(id int) (*ServiceRequest, error)
+	UpdateServiceRequestStatus(id int, statusID int) (*ServiceRequest, error)
 }
 
 type ServiceRequestUsecase interface {
 	GetAllServiceRequest() (*[]ServiceRequest, error)
 	GetServiceRequest(id int) (*ServiceRequest, error)
 	CreateServiceRequest(newServiceRequest *ServiceRequest) (*ServiceRequest, error)
+	UpdateServiceRequestStatus(id int, statusID int) (*ServiceRequest, error)
 }

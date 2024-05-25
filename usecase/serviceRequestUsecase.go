@@ -83,3 +83,35 @@ func (u *serviceRequestUsecase) CreateServiceRequest(newServiceRequest *domain.S
 	response.ErrorLog = errorLogArr
 	return nil, nil
 }
+
+func (u *serviceRequestUsecase) UpdateServiceRequestStatus(id int, statusID int) (*domain.ServiceRequest, error) {
+
+	statusIDList := []int{1, 2, 3, 4, 5, 6}
+	isContains := false
+	for _, elem := range statusIDList {
+		if elem == statusID {
+			isContains = true
+			break
+		}
+	}
+	if !isContains {
+		return nil, errors.New("error! statusid is invalid")
+	}
+
+	if id == 0 {
+		return nil, errors.New("error! id is not invalid")
+	}
+
+	_, err := u.serviceRepository.GetServiceRequest(id)
+
+	if err != nil {
+		return nil, errors.New("error! id is not contain in db")
+	}
+	response, err := u.serviceRepository.UpdateServiceRequestStatus(id, statusID)
+
+	if err != nil {
+		return nil, errors.New("error! service request cannot update")
+	}
+
+	return response, nil
+}
