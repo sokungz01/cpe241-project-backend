@@ -37,12 +37,13 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	itemCategoryController := controller.NewItemCategoryController(itemCategoryUsecase)
 
 	itemRepo := repository.NewItemRepository(myDB)
-	itemUsecase := usecase.NewItemUsecase(itemRepo)
-	itemController := controller.NewItemController(itemUsecase)
 
 	itemLogRepo := repository.NewItemLogRepository(myDB)
 	itemLogUsecase := usecase.NewItemLogUsecase(itemLogRepo, itemRepo, userRepo)
 	itemLogController := controller.NewItemLogController(itemLogUsecase)
+
+	itemUsecase := usecase.NewItemUsecase(itemRepo,itemLogUsecase)
+	itemController := controller.NewItemController(itemUsecase)
 
 	errorLogRepo := repository.NewErrorLogRepository(myDB)
 	errorTypeRepo := repository.NewErrorTypeRepository(myDB)

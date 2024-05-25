@@ -6,6 +6,7 @@ type Item struct {
 	ItemName       string  `json:"itemName" db:"itemName"`
 	ItemCost       float64 `json:"itemCost" db:"itemCost"`
 	ItemQty        int     `json:"qty" form:"qty" db:"qty"`
+	StaffID        int     `json:"staffID" db:"staffID"`
 }
 
 type ItemUseCase interface {

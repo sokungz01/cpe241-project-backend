@@ -8,19 +8,33 @@ import (
 
 type itemUsecase struct {
 	itemRepository domain.ItemRepository
+	log            domain.ItemLogUsecase
 }
 
-func NewItemUsecase(itemRepository domain.ItemRepository) domain.ItemUseCase {
-	return &itemUsecase{itemRepository: itemRepository}
+func NewItemUsecase(itemRepository domain.ItemRepository, log domain.ItemLogUsecase) domain.ItemUseCase {
+	return &itemUsecase{itemRepository: itemRepository,
+		log: log}
 }
 
 func (u *itemUsecase) CreateItem(item *domain.Item) (*domain.Item, error) {
 	if item.ItemName == "" || item.ItemCost == 0 || item.ItemQty == 0 || item.ItemCategoryID == 0 {
 		return nil, errors.New("erorr! body empty")
 	}
-	response, err := u.itemRepository.CreateItem(item)
+	dummy := new(domain.Item)
+	adding := new(domain.ItemLog)
+	dummy.ItemQty = 0
+
+	response, err := u.itemRepository.CreateItem(dummy)
 	if err != nil {
 		return nil, errors.New("erorr! cannot create new item ")
+	}
+	adding.ItemID = item.ItemID
+	adding.ItemQty = item.ItemQty
+	adding.StaffID = item.StaffID
+	adding.IsAdd = true
+	_, logerr := u.log.CreateItemLog(adding)
+	if logerr != nil {
+		return nil, errors.New("erorr! cannot create new item due to logging error ")
 	}
 	return response, nil
 }
