@@ -53,6 +53,10 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	serviceRequestUsecase := usecase.NewServiceRequestUsecase(serviceRequestRepo, userUseCase, machineUsecase, errorTypeUsecase, errorLogRepo)
 	serviceRequestController := controller.NewServiceRequestController(serviceRequestUsecase)
 
+	serviceResponseRepo := repository.NewServiceResponseRepository(myDB)
+	serviceResponseUsecase := usecase.NewServiceResponsUsecase(serviceResponseRepo, userUseCase, serviceRequestUsecase)
+	serviceResponseController := controller.NewServiceResponseController(serviceResponseUsecase)
+
 	maintenanceStatusRepo := repository.NewmaintenanceStatusrepo(myDB)
 	maintenanceStatusUsecase := usecase.NewmaintenanceStatusUsecase(maintenanceStatusRepo)
 	maintenanceStatusController := controller.NewMaintenanceStatuscontroller(maintenanceStatusUsecase)
@@ -120,7 +124,10 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	serviceRequest.Get("/", serviceRequestController.GetAllServiceRequest)
 	serviceRequest.Post("/", serviceRequestController.CreateServiceRequest)
 
+	serviceResponse := app.Group("/serviceresponse")
+	serviceResponse.Get("/", serviceResponseController.GetAll)
+
 	maintenanceStat := app.Group("/maintenancestatus")
-	maintenanceStat.Get("/",maintenanceStatusController.GetAll)
+	maintenanceStat.Get("/", maintenanceStatusController.GetAll)
 
 }
