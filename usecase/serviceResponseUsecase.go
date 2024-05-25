@@ -14,12 +14,13 @@ type serviceResponseUsecase struct {
 	itemRepo         domain.ItemRepository
 	itemLog          domain.ItemLogUsecase
 	MParts           domain.MaintenancePartsRepository
+	machine          domain.MachineUsecase
 }
 
 func NewServiceResponsUsecase(responseRepo domain.ServiceResponseRepository,
 	user domain.UserUseCase, requestedService domain.ServiceRequestUsecase,
 	item domain.ItemUseCase, itemRepo domain.ItemRepository, MParts domain.MaintenancePartsRepository,
-	itemLog domain.ItemLogUsecase) domain.ServiceResponseUsecase {
+	itemLog domain.ItemLogUsecase, machine domain.MachineUsecase) domain.ServiceResponseUsecase {
 	return &serviceResponseUsecase{
 		responseRepo:     responseRepo,
 		user:             user,
@@ -28,6 +29,7 @@ func NewServiceResponsUsecase(responseRepo domain.ServiceResponseRepository,
 		itemRepo:         itemRepo,
 		MParts:           MParts,
 		itemLog:          itemLog,
+		machine:          machine,
 	}
 }
 
@@ -72,6 +74,7 @@ func (u *serviceResponseUsecase) CreateServiceResponse(newResponse *domain.Servi
 		newLog.CreateDate = newResponse.CreatedDate
 		u.itemLog.CreateItemLog(newLog)
 	}
+	u.requestedService.UpdateServiceRequestStatus(newResponse.RequestedServiceID, 2)
 	return response, nil
 }
 
