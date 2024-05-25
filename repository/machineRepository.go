@@ -74,3 +74,11 @@ func (m *machineRepository) DeleteMachine(id int) error {
 	}
 	return nil
 }
+
+func (m *machineRepository) UpdateMachineStatus(id int, status int) error {
+	_, err := m.db.Exec("UPDATE `machine` SET `status` = ? WHERE `machineID` = ?", status, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}

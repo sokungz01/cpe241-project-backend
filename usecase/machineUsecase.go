@@ -74,3 +74,7 @@ func (m *machineUsecase) UpdateMachineData(id int, newMachineData *domain.Machin
 	}
 	return response, nil
 }
+
+func (m *machineUsecase) UpdateMachineStatus(id int, status int) error {
+	return m.machineRepo.UpdateMachineStatus(id, status)
+}
