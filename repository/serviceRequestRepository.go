@@ -24,3 +24,15 @@ func (r *serviceRequestRepository) GetAllServiceRequest() (*[]domain.ServiceRequ
 	}
 	return &response, nil
 }
+
+func (r *serviceRequestRepository) GetServiceRequest(id int) (*domain.ServiceRequest, error) {
+	response := new(domain.ServiceRequest)
+	err := r.db.Get(response, "SELECT *"+
+		"FROM `serviceRequest`"+
+		"INNER JOIN employee ON employee.employeeID = serviceRequest.`employeeID`"+
+		"INNER JOIN machine ON machine.machineID = serviceRequest.`machineID` WHERE `serviceID` = ?", id)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}

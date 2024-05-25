@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"strconv"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/sokungz01/cpe241-project-backend/domain"
 )
@@ -11,6 +13,7 @@ type serviceRequestController struct {
 
 type ServiceRequestController interface {
 	GetAllServiceRequest(c *fiber.Ctx) error
+	GetServiceRequest(c *fiber.Ctx) error
 	CreateServiceRequest(c *fiber.Ctx) error
 }
 
@@ -22,6 +25,18 @@ func NewServiceRequestController(serviceRequestUsecase domain.ServiceRequestUsec
 
 func (srq *serviceRequestController) GetAllServiceRequest(c *fiber.Ctx) error {
 	response, err := srq.serviceRequestUsecase.GetAllServiceRequest()
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
+	}
+	return c.Status(fiber.StatusOK).JSON(response)
+}
+
+func (srq *serviceRequestController) GetServiceRequest(c *fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
+	}
+	response, err := srq.serviceRequestUsecase.GetServiceRequest(id)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
 	}

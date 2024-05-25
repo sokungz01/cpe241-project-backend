@@ -122,6 +122,7 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 
 	serviceRequest := app.Group("/servicerequest")
 	serviceRequest.Get("/", serviceRequestController.GetAllServiceRequest)
+	serviceRequest.Get("/:id", serviceRequestController.GetServiceRequest)
 	serviceRequest.Post("/", serviceRequestController.CreateServiceRequest)
 
 	serviceResponse := app.Group("/serviceresponse")
