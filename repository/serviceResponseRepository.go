@@ -31,6 +31,12 @@ func (r *serviceResponseRepository) CreateServiceResponse(newResponse *domain.Se
 	return err
 }
 
+func (r *serviceResponseRepository) DeleteResponse(id int) error {
+	_, err := r.db.Exec("DELETE FROM `serviceResponse`"+
+		" WHERE `serviceResponse`.`staffServiceID` = ?", id)
+	return err
+}
+
 func (r *serviceResponseRepository) GetResponse(id int) (*domain.ServiceResponse, error) {
 	response := new(domain.ServiceResponse)
 	err := r.db.Get(response, "SELECT *,`serviceResponse`.`description` AS `desc`"+

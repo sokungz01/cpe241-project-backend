@@ -39,6 +39,10 @@ func (u *serviceResponseUsecase) CreateServiceResponse(newResponse *domain.Servi
 	return err
 }
 
+func (u *serviceResponseUsecase) DeleteResponse(id int) error {
+	return u.responseRepo.DeleteResponse(id)
+}
+
 func (u *serviceResponseUsecase) GetResponse(id int) (*domain.ServiceResponse, error) {
 	response, err := u.responseRepo.GetResponse(id)
 	return response, err

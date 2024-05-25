@@ -19,11 +19,13 @@ type ServiceResponse struct {
 type ServiceResponseRepository interface {
 	GetAllResponse() (*[]ServiceResponse, error)
 	GetResponse(id int) (*ServiceResponse, error)
+	DeleteResponse(id int) error
 	CreateServiceResponse(newResponse *ServiceResponse) error
 }
 
 type ServiceResponseUsecase interface {
 	GetAllResponse() (*[]ServiceResponse, error)
 	GetResponse(id int) (*ServiceResponse, error)
+	DeleteResponse(id int) error
 	CreateServiceResponse(newResponse *ServiceResponse) error
 }
