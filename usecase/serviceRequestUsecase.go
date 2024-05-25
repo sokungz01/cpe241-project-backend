@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"errors"
+
 	"github.com/sokungz01/cpe241-project-backend/domain"
 )
 
@@ -35,6 +37,23 @@ func (u *serviceRequestUsecase) GetAllServiceRequest() (*[]domain.ServiceRequest
 		(*response)[index].ErrorLog = make([]domain.ErrorLog, 0)
 		(*response)[index].ErrorLog = *errorLog
 	}
+	return response, err
+}
+
+func (u *serviceRequestUsecase) GetServiceRequest(id int) (*domain.ServiceRequest, error) {
+	if id == 0 {
+		return nil, errors.New("Error! serviceID cannot be not a number ")
+	}
+	response, err := u.serviceRepository.GetServiceRequest(id)
+	if err != nil {
+		return nil, err
+	}
+	errorLog, err := u.errorlog.FindByServiceID(response.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+	response.ErrorLog = make([]domain.ErrorLog, 0)
+	response.ErrorLog = *errorLog
 	return response, err
 }
 
