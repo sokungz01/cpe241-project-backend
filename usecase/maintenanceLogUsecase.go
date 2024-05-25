@@ -21,7 +21,7 @@ func NewMaintenanceLogUsecase(repo domain.MaintenanceLogRepository,
 
 func (u *maintenanceLogUsecase) GetAllmaintenanceLog() (*[]domain.MaintenanceLog, error) {
 	response, err := u.repo.GetAllmaintenanceLog()
-	for i, _ := range *response {
+	for i := range *response {
 		(*response)[i].Staff.Password = ""
 	}
 	if err != nil {

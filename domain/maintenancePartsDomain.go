@@ -8,6 +8,7 @@ type MaintenanceParts struct {
 	MaintenancePartID int       `json:"maintenancePart" db:"maintenancePartID"`
 	ServiceID         int       `json:"serviceID" db:"serviceID"`
 	ItemID            int       `json:"itemID" db:"itemID"`
+	Item              Item      `json:"item"`
 	Qty               int       `json:"qty" db:"qty"`
 	CreatedDate       time.Time `json:"createdDate" db:"createdDate"`
 }
