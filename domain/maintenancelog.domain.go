@@ -18,6 +18,7 @@ type MaintenanceLog struct {
 
 type MaintenanceLogRepository interface {
 	GetAllmaintenanceLog() (*[]MaintenanceLog, error)
+	GetMaintenanceLogByID(maintainID int) (*MaintenanceLog, error)
 	GetMaintenanceLogByMachineID(machineID int) (*[]MaintenanceLog, error)
 	GetMaintenanceLogByStaffID(staffID int) (*[]MaintenanceLog, error)
 	CreatemaintenanceLog(newLog *MaintenanceLog) (*MaintenanceLog, error)
@@ -26,6 +27,7 @@ type MaintenanceLogRepository interface {
 
 type MaintenanceLogUsecase interface {
 	GetAllmaintenanceLog() (*[]MaintenanceLog, error)
+	GetMaintenanceLogByID(maintainID int) (*MaintenanceLog, error)
 	GetMaintenanceLogByMachineID(machineID int) (*[]MaintenanceLog, error)
 	GetMaintenanceLogByStaffID(staffID int) (*[]MaintenanceLog, error)
 	CreatemaintenanceLog(newLog *MaintenanceLog) (*MaintenanceLog, error)

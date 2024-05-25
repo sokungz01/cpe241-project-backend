@@ -9,6 +9,7 @@ import (
 
 type MaintenanceLogController interface {
 	GetAllmaintenanceLog(c *fiber.Ctx) error
+	GetMaintenanceLogByID(c *fiber.Ctx) error
 	GetMaintenanceLogByMachineID(c *fiber.Ctx) error
 	GetMaintenanceLogByStaffID(c *fiber.Ctx) error
 	CreatemaintenanceLog(c *fiber.Ctx) error
@@ -49,6 +50,18 @@ func (u *maintenanceLogcontroller) GetMaintenanceLogByStaffID(c *fiber.Ctx) erro
 		return c.Status(fiber.StatusInternalServerError).SendString("maintenanceLog: parse err")
 	}
 	response, err := u.usecase.GetMaintenanceLogByStaffID(id)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
+	}
+	return c.Status(fiber.StatusOK).JSON(response)
+}
+
+func (u *maintenanceLogcontroller) GetMaintenanceLogByID(c *fiber.Ctx) error {
+	id, parserr := strconv.Atoi(c.Params("id"))
+	if parserr != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString("maintenanceLog: parse err")
+	}
+	response, err := u.usecase.GetMaintenanceLogByID(id)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
 	}

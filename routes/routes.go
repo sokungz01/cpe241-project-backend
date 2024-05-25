@@ -150,5 +150,6 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	maintenanceLog.Get("/getbymachineID/:id", maintenanceLogController.GetMaintenanceLogByMachineID)
 	maintenanceLog.Get("/getbystaffID/:id", maintenanceLogController.GetMaintenanceLogByStaffID)
 	maintenanceLog.Post("/", maintenanceLogController.CreatemaintenanceLog)
+	maintenanceLog.Get("/:id", maintenanceLogController.GetMaintenanceLogByID)
 	maintenanceLog.Put("/:id", maintenanceLogController.UpdateMaintenanceLogStatus)
 }
