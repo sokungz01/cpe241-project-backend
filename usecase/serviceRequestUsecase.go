@@ -102,7 +102,7 @@ func (u *serviceRequestUsecase) UpdateServiceRequestStatus(id int, statusID int)
 		return nil, errors.New("error! id is not invalid")
 	}
 
-	_, err := u.serviceRepository.GetServiceRequest(id)
+	service, err := u.serviceRepository.GetServiceRequest(id)
 
 	if err != nil {
 		return nil, errors.New("error! id is not contain in db")
@@ -112,6 +112,15 @@ func (u *serviceRequestUsecase) UpdateServiceRequestStatus(id int, statusID int)
 	if err != nil {
 		return nil, errors.New("error! service request cannot update")
 	}
-
+	var machineStatus int
+	if statusID == 1 || statusID == 2 || statusID == 6 {
+		machineStatus = 0
+	} else {
+		machineStatus = 1
+	}
+	statUpdateErr := u.machine.UpdateMachineStatus(service.MachineID, machineStatus)
+	if statUpdateErr != nil {
+		return nil, statUpdateErr
+	}
 	return response, nil
 }
