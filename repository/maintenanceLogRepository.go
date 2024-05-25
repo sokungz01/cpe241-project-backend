@@ -15,9 +15,55 @@ func NewMaintenanceLogRepository(db *platform.Mysql) domain.MaintenanceLogReposi
 
 func (r *maintenanceLogrepository) GetAllmaintenanceLog() (*[]domain.MaintenanceLog, error) {
 	response := new([]domain.MaintenanceLog)
-	err := r.db.Select(response, "SELECT *"+
-		" FROM `maintenanceLog`"+
-		" INNER JOIN employee ON maintenanceLog.staffID = employee.employeeID")
+	err := r.db.Select(response, "SELECT * "+
+		"FROM `maintenanceLog` "+
+		"INNER JOIN employee ON maintenanceLog.staffID = employee.employeeID "+
+		"INNER JOIN machine ON maintenanceLog.machineID = machine.machineID")
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+func (r *maintenanceLogrepository) GetMaintenanceLogByMachineID(machineID int) (*[]domain.MaintenanceLog, error) {
+	response := new([]domain.MaintenanceLog)
+	err := r.db.Select(response, "SELECT * "+
+		"FROM `maintenanceLog` "+
+		"INNER JOIN employee ON maintenanceLog.staffID = employee.employeeID "+
+		"INNER JOIN machine ON maintenanceLog.machineID = machine.machineID "+
+		"WHERE `maintenanceLog`.`machineID` = ?", machineID)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+func (r *maintenanceLogrepository) GetMaintenanceLogByStaffID(staffID int) (*[]domain.MaintenanceLog, error) {
+	response := new([]domain.MaintenanceLog)
+	err := r.db.Select(response, "SELECT * "+
+		"FROM `maintenanceLog` "+
+		"INNER JOIN employee ON maintenanceLog.staffID = employee.employeeID "+
+		"INNER JOIN machine ON maintenanceLog.machineID = machine.machineID "+
+		"WHERE `maintenanceLog`.`staffID` = ?", staffID)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+func (r *maintenanceLogrepository) CreatemaintenanceLog(newLog *domain.MaintenanceLog) (*domain.MaintenanceLog, error) {
+	response := new(domain.MaintenanceLog)
+	_, err := r.db.Exec("INSERT INTO `maintenanceLog` (`staffID`,`machineID`,`period`,`createdDate`,`updateDate`,`statusID`) "+
+		"VALUE (?,?,?,?,?,?)",
+		newLog.StaffID, newLog.MachineID, newLog.Period, newLog.CreatedDate, newLog.UpdateDate, newLog.StatusID)
+	if err != nil {
+		return nil, err
+	}
+	err = r.db.Get(response, "SELECT * "+
+		"FROM `maintenanceLog` "+
+		"INNER JOIN employee ON maintenanceLog.staffID = employee.employeeID "+
+		"INNER JOIN machine ON maintenanceLog.machineID = machine.machineID "+
+		"WHERE `maintenanceID` IN  (SELECT LAST_INSERT_ID() as id)")
 	if err != nil {
 		return nil, err
 	}
