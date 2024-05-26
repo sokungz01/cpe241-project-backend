@@ -64,14 +64,18 @@ func (u *maintenanceLogUsecase) GetMaintenanceLogByStaffID(staffID int) (*[]doma
 }
 
 func (u *maintenanceLogUsecase) CreatemaintenanceLog(newLog *domain.MaintenanceLog) (*domain.MaintenanceLog, error) {
-	_, userErr := u.user.GetById(newLog.StaffID)
+	user, userErr := u.user.GetById(newLog.StaffID)
 	if userErr != nil {
+		return nil, errors.New("mlogcreate : not a valid staff")
+	}
+	if user.IsDelete == 1 {
 		return nil, errors.New("mlogcreate : not a valid staff")
 	}
 	_, machineErr := u.machine.GetMachineByID(newLog.MachineID)
 	if machineErr != nil {
 		return nil, errors.New("mlogcreate : not a valid valid")
 	}
+
 	response, err := u.repo.CreatemaintenanceLog(newLog)
 	if err != nil {
 		return nil, err
@@ -84,5 +88,17 @@ func (u *maintenanceLogUsecase) UpdateMaintenanceLogStatus(maintenanceID int, st
 	if status != 3 && status != 1 {
 		return errors.New("value out of range")
 	}
-	return u.repo.UpdateMaintenanceLogStatus(maintenanceID, status)
+	err := u.repo.UpdateMaintenanceLogStatus(maintenanceID, status)
+	if err != nil {
+		return err
+	}
+	res, resErr := u.repo.GetMaintenanceLogByID(maintenanceID)
+	if resErr != nil {
+		return resErr
+	}
+	mStatErr := u.machine.UpdateMachineStatus(res.MachineID, 3)
+	if mStatErr != nil {
+		return mStatErr
+	}
+	return nil
 }
