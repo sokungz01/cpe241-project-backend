@@ -38,7 +38,7 @@ func (u *userUsecase) SignUp(c *fiber.Ctx) error {
 func (u *userUsecase) GetAll(c *fiber.Ctx) error {
 	users, err := u.usecase.GetAll()
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).SendString("Pung I here")
+		return c.Status(fiber.StatusInternalServerError).SendString(err.Error())
 	}
 	return c.Status(fiber.StatusOK).JSON(users)
 }

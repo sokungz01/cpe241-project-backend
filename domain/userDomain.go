@@ -9,6 +9,7 @@ type User struct {
 	Bonus     float64 `json:"bonus" db:"bonus"`
 	Email     string  `json:"email" db:"email"`
 	Password  string  `json:"password,omitempty" db:"password"`
+	IsDelete  int     `json:"isDelete" db:"isDelete"`
 }
 
 type UserRepository interface {

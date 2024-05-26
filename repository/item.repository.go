@@ -60,5 +60,5 @@ func (r *itemRepository) DeleteItem(id int) error {
 		return err
 	}
 
-	return nil
+	return nil					
 }
