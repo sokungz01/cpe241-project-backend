@@ -61,7 +61,13 @@ func (u *serviceRequestUsecase) CreateServiceRequest(newServiceRequest *domain.S
 	if newServiceRequest == nil || newServiceRequest.EmployeeID == 0 || newServiceRequest.MachineID == 0 || newServiceRequest.Description == "" {
 		return nil, errors.New("error! service request data not provide")
 	}
-
+	chk, chkErr := u.employee.GetById(newServiceRequest.EmployeeID)
+	if chkErr != nil {
+		return nil, chkErr
+	}
+	if chk.IsDelete != 0 {
+		return nil, errors.New("error! service request cannot create")
+	}
 	response, err := u.serviceRepository.CreateServiceRequest(newServiceRequest)
 
 	if err != nil {

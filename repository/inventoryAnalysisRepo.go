@@ -20,6 +20,7 @@ func (r *analysisRepo) GetInventoryAnanlysis() (*[]domain.InventoryAnalysis, err
 		"FROM `inventory` AS `i` "+
 		"INNER JOIN `itemCategory` AS `ic` ON `i`.`itemCategoryID` = `ic`.`categoryID` "+
 		"INNER JOIN `itemLog` AS `il` ON `i`.`itemID` = `il`.`itemID` "+
+		"WHERE `i`.`isDelete` = 0 "+
 		"GROUP BY `Date`,`ic`.`categoryName`")
 	if err != nil {
 		return nil, err
@@ -59,6 +60,7 @@ func (r *analysisRepo) GetEmployeeEngagementAnalysis() (*[]domain.EmployeeEngage
 			"INNER JOIN `employee` AS `e` ON `sres`.`staffID` = `e`.`employeeID` "+
 			"INNER JOIN `maintenanceParts` AS `mp` ON `sres`.`staffServiceID` = `mp`.`serviceID` "+
 			"INNER JOIN `inventory` AS `i` ON `mp`.`itemID` = `i`.`itemID` "+
+			"WHERE `i`.`isDelete` = 0 "+
 			"GROUP BY `e`.`employeeID`, `e`.`name`, `e`.`surname`")
 	if err != nil {
 		return nil, err
@@ -78,6 +80,7 @@ func (r *analysisRepo) GetMaintenanceCostAnalysis() (*[]domain.MaintenanceCostAn
 			"INNER JOIN `serviceResponse` AS `sres` ON `sres`.`requestedServiceID` = `el`.`serviceID` "+
 			"INNER JOIN `maintenanceParts` AS `mp` ON `sres`.`staffServiceID` = `mp`.`serviceID` "+
 			"INNER JOIN `inventory` AS `i` ON `mp`.`itemID` = `i`.`itemID` "+
+			"WHERE `i`.`isDelete` = 0 "+
 			"GROUP BY `el`.`errorTypeID`")
 	if err != nil {
 		return nil, err

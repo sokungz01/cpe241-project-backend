@@ -39,8 +39,11 @@ func (u *serviceResponseUsecase) GetAllResponse() (*[]domain.ServiceResponse, er
 }
 
 func (u *serviceResponseUsecase) CreateServiceResponse(newResponse *domain.ServiceResponse) (*domain.ServiceResponse, error) {
-	_, userErr := u.user.GetById(newResponse.StaffID)
+	user, userErr := u.user.GetById(newResponse.StaffID)
 	if userErr != nil {
+		return nil, errors.New("serviceResponse: staffID error")
+	}
+	if user.IsDelete == 1 {
 		return nil, errors.New("serviceResponse: staffID error")
 	}
 	_, serviceErr := u.requestedService.GetServiceRequest(newResponse.RequestedServiceID)

@@ -32,9 +32,12 @@ func (u *itemLogUsecase) CreateItemLog(itemLog *domain.ItemLog) (*domain.ItemLog
 	if err != nil {
 		return nil, err
 	}
-	_, err = u.userRepository.GetById(itemLog.StaffID)
-	if err != nil {
-		return nil, err
+	chkDelete, chkerr := u.userRepository.GetById(itemLog.StaffID)
+	if chkerr != nil {
+		return nil, chkerr
+	}
+	if chkDelete.IsDelete == 1 {
+		return nil, errors.New("resulting item quantity cannot be negative")
 	}
 	item := new(domain.Item)
 	item = query

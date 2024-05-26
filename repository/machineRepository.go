@@ -29,7 +29,7 @@ func (m *machineRepository) CreateMachine(newMachine *domain.Machine) (*domain.M
 func (m *machineRepository) GetAllMachine() (*[]domain.Machine, error) {
 
 	response := make([]domain.Machine, 0)
-	if err := m.db.Select(&response, "SELECT * FROM `machine`"); err != nil {
+	if err := m.db.Select(&response, "SELECT * FROM `machine` WHERE `isDelete` = 0"); err != nil {
 		return nil, err
 	}
 	return &response, nil
@@ -68,7 +68,7 @@ func (m *machineRepository) UpdateMachineData(id int, newMachineData *domain.Mac
 }
 
 func (m *machineRepository) DeleteMachine(id int) error {
-	_, err := m.db.Exec("DELETE FROM `machine` WHERE `machineID` = ?", id)
+	_, err := m.db.Exec("UPDATE `machine` SET `isDelete` = 1 WHERE `machineID` = ?", id)
 	if err != nil {
 		return err
 	}

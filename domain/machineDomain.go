@@ -14,6 +14,7 @@ type Machine struct {
 	EndDate       *sql.NullTime `json:"endDate" db:"endDate"`
 	Description   string        `json:"desc" db:"description"`
 	Status        int           `json:"status" db:"status"`
+	IsDelete      int           `json:"isDelete" db:"isDelete"`
 }
 
 type MachineRepository interface {
