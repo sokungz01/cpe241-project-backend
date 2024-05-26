@@ -15,7 +15,7 @@ func NewAuthenRepository(db *platform.Mysql) domain.AuthenRepository {
 
 func (s *authenRepository) SignIn(user *domain.AuthenPayload) (*domain.AuthenPayload, error) {
 	var response domain.AuthenPayload
-	err := s.db.Get(&response, "SELECT `employeeID`,`email`, `password`, `positionID` FROM `employee` WHERE `email` = ? ", user.Email)
+	err := s.db.Get(&response, "SELECT `employeeID`,`email`, `password`, `positionID` FROM `employee` WHERE `email` = ? AND `isDelete` = 0", user.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -24,7 +24,7 @@ func (s *authenRepository) SignIn(user *domain.AuthenPayload) (*domain.AuthenPay
 
 func (s *authenRepository) Me(userID int) (*domain.AuthenDetail, error) {
 	var response domain.AuthenDetail
-	err := s.db.Get(&response, "SELECT `employeeID`,`email`, `password`,`name`, `surname`, `positionID`, `imageURL` FROM `employee` WHERE `employeeID` = ? ", userID)
+	err := s.db.Get(&response, "SELECT `employeeID`,`email`, `password`,`name`, `surname`, `positionID`, `imageURL` FROM `employee` WHERE `employeeID` = ? AND `isDelete` = 0", userID)
 	if err != nil {
 		return nil, err
 	}
