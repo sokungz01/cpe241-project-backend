@@ -25,6 +25,19 @@ func (r *maintenanceLogrepository) GetAllmaintenanceLog() (*[]domain.Maintenance
 	return response, nil
 }
 
+func (r *maintenanceLogrepository) GetMaintenanceLogByID(maintainID int) (*domain.MaintenanceLog, error) {
+	response := new(domain.MaintenanceLog)
+	err := r.db.Get(response, "SELECT * "+
+		"FROM `maintenanceLog` "+
+		"INNER JOIN employee ON maintenanceLog.staffID = employee.employeeID "+
+		"INNER JOIN machine ON maintenanceLog.machineID = machine.machineID "+
+		"WHERE `maintenanceLog`.`maintenanceID` = ?", maintainID)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 func (r *maintenanceLogrepository) GetMaintenanceLogByMachineID(machineID int) (*[]domain.MaintenanceLog, error) {
 	response := new([]domain.MaintenanceLog)
 	err := r.db.Select(response, "SELECT * "+

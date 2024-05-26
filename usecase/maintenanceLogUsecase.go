@@ -32,6 +32,14 @@ func (u *maintenanceLogUsecase) GetAllmaintenanceLog() (*[]domain.MaintenanceLog
 	return response, nil
 }
 
+func (u *maintenanceLogUsecase) GetMaintenanceLogByID(maintainID int) (*domain.MaintenanceLog, error) {
+	response, err := u.repo.GetMaintenanceLogByID(maintainID)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 func (u *maintenanceLogUsecase) GetMaintenanceLogByMachineID(machineID int) (*[]domain.MaintenanceLog, error) {
 	response, err := u.repo.GetMaintenanceLogByMachineID(machineID)
 	if err != nil {
