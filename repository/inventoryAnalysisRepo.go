@@ -21,7 +21,7 @@ func (r *analysisRepo) GetInventoryAnanlysis() (*[]domain.InventoryAnalysis, err
 		"INNER JOIN `itemCategory` AS `ic` ON `i`.`itemCategoryID` = `ic`.`categoryID` "+
 		"INNER JOIN `itemLog` AS `il` ON `i`.`itemID` = `il`.`itemID` "+
 		"WHERE `i`.`isDelete` = 0 "+
-		"GROUP BY `Date`,`ic`.`categoryName`")
+		"GROUP BY `Date`,`ic`.`categoryName` ORDER BY `Date`")
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func (r *analysisRepo) GetEmployeeEngagementAnalysis() (*[]domain.EmployeeEngage
 			"INNER JOIN `maintenanceParts` AS `mp` ON `sres`.`staffServiceID` = `mp`.`serviceID` "+
 			"INNER JOIN `inventory` AS `i` ON `mp`.`itemID` = `i`.`itemID` "+
 			"WHERE `i`.`isDelete` = 0 "+
-			"GROUP BY `e`.`employeeID`, `e`.`name`, `e`.`surname`")
+			"GROUP BY `e`.`employeeID`, `e`.`name`, `e`.`surname` ORDER BY maintenanceCount DESC ")
 	if err != nil {
 		return nil, err
 	}
