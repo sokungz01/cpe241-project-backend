@@ -85,7 +85,7 @@ func (u *maintenanceLogUsecase) CreatemaintenanceLog(newLog *domain.MaintenanceL
 }
 
 func (u *maintenanceLogUsecase) UpdateMaintenanceLogStatus(maintenanceID int, status int) error {
-	if status != 3 && status != 1 && status != 4 {
+	if status != 3 && status != 1 && status != 5 {
 		return errors.New("value out of range")
 	}
 	err := u.repo.UpdateMaintenanceLogStatus(maintenanceID, status)
