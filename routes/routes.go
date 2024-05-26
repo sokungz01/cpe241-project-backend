@@ -151,4 +151,13 @@ func RoutesRegister(app *fiber.App, myDB *platform.Mysql, cfg *config.Config) {
 	maintenanceLog.Get("/getbystaffID/:id", maintenanceLogController.GetMaintenanceLogByStaffID)
 	maintenanceLog.Post("/", maintenanceLogController.CreatemaintenanceLog)
 	maintenanceLog.Put("/:id", maintenanceLogController.UpdateMaintenanceLogStatus)
+
+	analysisRepo := repository.NewAnalysisRepo(myDB)
+	analysisController := controller.NewAnalysisController(analysisRepo)
+
+	analysis := app.Group("/analyze")
+	analysis.Get("/timeseriesInventory", analysisController.GetInventoryAnanlysis)
+	analysis.Get("/machinetypeerror", analysisController.GetMachineTypeErrorAnalysis)
+	analysis.Get("/employeeengage", analysisController.GetEmployeeEngagementAnalysis)
+	analysis.Get("/maintenancecos", analysisController.GetMaintenanceCostAnalysis)
 }
