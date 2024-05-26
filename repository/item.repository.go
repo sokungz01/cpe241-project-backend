@@ -26,7 +26,7 @@ func (r *itemRepository) CreateItem(item *domain.Item) (*domain.Item, error) {
 
 func (r *itemRepository) GetAllItem() (*[]domain.Item, error) {
 	response := make([]domain.Item, 0)
-	if err := r.db.Select(&response, "SELECT * FROM `inventory`"); err != nil {
+	if err := r.db.Select(&response, "SELECT * FROM `inventory` WHERE `isDelete` = 0"); err != nil {
 		return nil, err
 	}
 	return &response, nil
@@ -54,7 +54,7 @@ func (r *itemRepository) UpdateItem(id int, item *domain.Item) (*domain.Item, er
 }
 
 func (r *itemRepository) DeleteItem(id int) error {
-	_, err := r.db.Exec("DELETE FROM `inventory` WHERE `itemID` = ?", id)
+	_, err := r.db.Exec("UPDATE `inventory` SET `isDelete` = 1 WHERE `itemID` = ?", id)
 
 	if err != nil {
 		return err

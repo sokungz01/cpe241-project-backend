@@ -1,12 +1,13 @@
 package domain
 
 type Item struct {
-	ItemID         int     `json:"itemID" db:"itemID"`
-	ItemCategoryID int     `json:"itemCategoryID" db:"itemCategoryID"`
-	ItemName       string  `json:"itemName" db:"itemName"`
-	ItemCost       float64 `json:"itemCost" db:"itemCost"`
-	ItemQty        int     `json:"qty" form:"qty" db:"qty"`
-	StaffID        int     `json:"staffID" db:"staffID"`
+	ItemID         int     `json:"itemID,omitempty" db:"itemID"`
+	ItemCategoryID int     `json:"itemCategoryID,omitempty" db:"itemCategoryID"`
+	ItemName       string  `json:"itemName,omitempty" db:"itemName"`
+	ItemCost       float64 `json:"itemCost,omitempty" db:"itemCost"`
+	ItemQty        int     `json:"qty,omitempty" form:"qty" db:"qty"`
+	StaffID        int     `json:"staffID,omitempty" db:"staffID"`
+	IsDelete       int     `json:"isDelete,omitempty" db:"isDelete"`
 }
 
 type ItemUseCase interface {
