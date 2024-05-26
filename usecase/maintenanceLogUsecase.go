@@ -75,7 +75,7 @@ func (u *maintenanceLogUsecase) CreatemaintenanceLog(newLog *domain.MaintenanceL
 	if machineErr != nil {
 		return nil, errors.New("mlogcreate : not a valid valid")
 	}
-
+	u.machine.UpdateMachineStatus(newLog.MachineID, 0)
 	response, err := u.repo.CreatemaintenanceLog(newLog)
 	if err != nil {
 		return nil, err
@@ -85,7 +85,7 @@ func (u *maintenanceLogUsecase) CreatemaintenanceLog(newLog *domain.MaintenanceL
 }
 
 func (u *maintenanceLogUsecase) UpdateMaintenanceLogStatus(maintenanceID int, status int) error {
-	if status != 3 && status != 1 {
+	if status != 3 && status != 1 && status != 4 {
 		return errors.New("value out of range")
 	}
 	err := u.repo.UpdateMaintenanceLogStatus(maintenanceID, status)
@@ -96,7 +96,7 @@ func (u *maintenanceLogUsecase) UpdateMaintenanceLogStatus(maintenanceID int, st
 	if resErr != nil {
 		return resErr
 	}
-	mStatErr := u.machine.UpdateMachineStatus(res.MachineID, 3)
+	mStatErr := u.machine.UpdateMachineStatus(res.MachineID, 1)
 	if mStatErr != nil {
 		return mStatErr
 	}
