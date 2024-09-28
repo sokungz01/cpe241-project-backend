@@ -22,7 +22,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           rm: true
           source: "*"
-          target: "/home/sokungz/cpe241/backend"
+          target: "/home/sokungz/cpe241/sornrubsom_backend"
 
       - name: Create environment file
         uses: appleboy/ssh-action@v1.0.3
@@ -31,7 +31,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           script: |
-            cd /home/sokungz/cpe241/backend
+            cd /home/sokungz/cpe241/sornrubsom_backend
             docker compose down
             echo "${{ secrets.ENV }}" >> .env
             docker compose --env-file .env up -d --build
